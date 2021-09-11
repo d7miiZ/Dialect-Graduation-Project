@@ -18,6 +18,13 @@
 %----------------------------------------------------------------------------------------
 %	CLASS CONFIGURATION
 %----------------------------------------------------------------------------------------
+\def\school#1{\gdef\@school{#1}}
+\def\logo#1{\gdef\@logo{#1}}
+\def\ksulogo#1{\gdef\@ksulogo{#1}}
+\def\supervisor#1{\gdef\@supervisor{Supervised by: #1}}
+\usepackage{ragged2e}
+\usepackage{mwe,tikz}\usepackage[percent]{overpic}
+
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{diazessay}[2019/01/13 Diaz Essay class v1.0]
@@ -69,8 +76,12 @@
 %	FONTS
 %----------------------------------------------------------------------------------------
 
-\usepackage[utf8]{inputenc} % Required for inputting international characters
-\usepackage[T1]{fontenc} % Use 8-bit encoding
+% \usepackage[utf8]{inputenc} % Required for inputting international characters
+% \usepackage[T1]{fontenc} % Use 8-bit encoding
+\usepackage{arabtex}
+\usepackage{utf8}
+\setcode{utf8}
+
 
 \usepackage{mathpazo} % Use the Palatino font
 
@@ -84,16 +95,25 @@
 
 \makeatletter
 \renewcommand{\maketitle}{ % Customise the title (do not edit title and author name here)
-	\vspace*{30pt} % Vertical whitespace before the title
 	\begin{center} % Right align
-		{\LARGE\@title} % Increase the font size of the title
+	    \@ksulogo
+	    {\large\@school}
+	    \vspace*{30pt} % Vertical whitespace before the title
+	    
+		{\huge\@title} \\ % Increase the font size of the title
+		\vspace{10pt}
+		\@logo
+		\vspace{20pt} % Vertical whitespace between the title and author name
 		
-		\vspace{50pt} % Vertical whitespace between the title and author name
+		{\large\@author} % Author name
+		\vspace{20pt}
+		{\large\@supervisor}
 		
-		{\large\@author}\\ % Author name
+		\vfill 
 		\@date % Date
-		
-		\vspace{40pt} % Vertical whitespace between the author block and abstract
+% 		\clearpage
+% 		\vspace{40pt} % Vertical whitespace between the author block and abstract
+        \clearpage
 	\end{center}
 }
 \makeatother
