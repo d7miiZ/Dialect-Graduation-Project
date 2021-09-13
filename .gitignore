@@ -2,4 +2,4 @@
 */.ipynb_checkpoints/
 code/data
 code/train
-code/models
+code/models/*
