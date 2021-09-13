@@ -3,3 +3,5 @@
 code/data
 code/train
 code/models/*
+code/models
+extra_data/D7_data/tweets/tweets.json
