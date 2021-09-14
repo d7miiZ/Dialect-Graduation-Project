@@ -1,7 +1,8 @@
 */venv/
 */.ipynb_checkpoints/
-code/data
-code/train
-code/models/*
-code/models
+code/data/
+code/train/
+code/models/
+code/runs/
+code/2021-09-13-train
 extra_data/D7_data/tweets/tweets.json
