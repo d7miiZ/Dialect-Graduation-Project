@@ -1,6 +1,6 @@
 */venv/
 */.ipynb_checkpoints/
-code/data/
+# code/data/
 code/train/
 code/models/
 code/runs/
