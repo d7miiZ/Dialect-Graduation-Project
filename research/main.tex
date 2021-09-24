@@ -200,7 +200,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
 
 
             \subsubsubsection{Tokenization}
-            Tokenization is the process of breaking down sentences into smaller components such as words called tokens to make it analyzable for computers, it is an important operation in preprocessing text for any NLP task. There are several methods of performing tokenization, such as white tokenization, subword tokenization. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}
+            Tokenization is the process of breaking down sentences into smaller components such as words called tokens to make it analyzable for computers, it is an important operation in preprocessing text for any NLP task. There are several methods of performing tokenization, such as white tokenization, subword tokenization. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}.
             
             Tokenization also has limitations for the Arabic language, owing to the complexity of the language, words like "\RL{عقد}" and "\RL{جد}" depending on the context or pronunciation could lead to different meanings, also the difference between spoken language in news and everyday life, and not just in Arabic this is also true for most languages, and that is one of the challenges of tokenization.
     
@@ -214,14 +214,11 @@ We intend to build a machine learning powered classifier that distinguishes betw
                 \label{fig:wordembedding}
             \end{figure}
             
-            Computers can’t understand natural language, so in order to make computers understand it we have to create a representation for a language that a computer can process, and that is what word embedding do. Word embedding is a term used for the representation of words for text analysis, typically in the form of a real-valued vector that encodes the meaning of the word such that the words that are closer in the vector space are expected to be similar in meaning \cite{jurafsky_martin_2000}. There are several word embedding models, and generally all models share the concept of context to determine how close are words to each other, “You shall know a word by the company it keeps!” (Firth, J. R. 1957:11). Figure \ref{fig:wordembedding} shows a model that learnt the relationships between countries and their capitals without information of what a capital city means
+            Computers can’t understand natural language, so in order to make computers understand it we have to create a representation for a language that a computer can process, and that is what word embedding do. Word embedding is a term used for the representation of words for text analysis, typically in the form of a real-valued vector that encodes the meaning of the word such that the words that are closer in the vector space are expected to be similar in meaning \cite{jurafsky_martin_2000}. There are several word embedding models, and generally all models share the concept of context to determine how close are words to each other, “You shall know a word by the company it keeps!” (Firth, J. R. 1957:11). Figure \ref{fig:wordembedding} shows a model that learnt the relationships between countries and their capitals without information of what a capital city means.
     
         
     \subsection{Neural networks}
-    
-    
-        \subsubsection{What are neural networks}
-        Neural networks are sub-field of machine learning, and also the parent field of deep learning. Neural networks are made up of layers of neurons and work like interconnected nodes inspired by the neurons inside the brain. By taking in data, they are able to recognize hidden patterns and and correlations in unprocessed data and use said patterns to cluster, classify and predict the data, among other applications. Unlike other machine learning model, neural networks with 
+        Neural networks are sub-field of machine learning, and also the parent field of deep learning. Neural networks are made up of layers of neurons and work like interconnected nodes inspired by the neurons inside the brain. By taking in data, they are able to recognize hidden patterns and and correlations in unprocessed data and use said patterns to cluster, classify and predict the data, among other applications.
         
         Neural networks layers consist of:
         \begin{enumerate}
@@ -238,18 +235,20 @@ We intend to build a machine learning powered classifier that distinguishes betw
             \label{fig:cmp}
         \end{figure}
         
-        Neural networks also are ideally fitted to assist humans solve complicated issues in real-life situations. They can examine and model the relationships among inputs and outputs which can be nonlinear and complicated; make generalizations and inferences; monitor hidden relationships, styles and predictions. Also, neural networks can enhance choice methods for natural language processing.
+        Neural networks also are ideally fitted to assist humans solve complicated issues in real-life situations. They can examine and model the relationships among inputs and outputs which can be nonlinear and complicated, make generalizations and inferences, monitor hidden relationships, styles and predictions.
         
         
         \subsubsection{Neural networks in natural language processing}
-        Neural networks are now prevelant in NLP such text classification (which is the objective of this research), machine translation, semantic parsing, which extracts useful bits of information in a large text, and many many more.
+        Neural networks are now prevalent in NLP such text classification (which is the objective of this research), machine translation, semantic parsing, which extracts useful bits of information in a large text, and many many more.
         
         % A great amount of NLP based applications (e.g., sentiment analysis, text classification, etc...) depend on language models. which define a probability distribution over sequences of words, characters or bytes in a natural language Different pre-trained language models have been proposed to address various domain-specific problems, one such model is BERT. 
         %%%%%%%%%%%%%%%%%%%%% Great summary of language representation, I think we might need to write it in the methodology section
 
+        \subsubsection{Deep learning}
+        \textbf{To Be Written}
         
         \subsubsection{Transformers}
-        
+        \textbf{To Be Written}
 
     \subsection{Dialect prediction approaches}
         One can approach the problem of dialect prediction in a number of ways, We will define and discuss some different dialect recognition approaches that differ in how they work.
@@ -262,7 +261,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
 
         
         \subsubsection{Automatic Machine-learning approach} \label{txt:simple_voting}
-        Dialect recognition automatic approach is based in machine learning, where it tries to build a statistical model that learns by analysing the training data after choosing an appropriate algorithm and applying NLP techniques, very famous algorithms in text classification would be support vector machines, naïve bayes and deep learning.
+        Dialect recognition automatic approach is based in machine learning, where it tries to build a statistical model that learns by analysing the training data after choosing an appropriate algorithm and applying NLP techniques. The most prominent algorithms in text classification would be support vector machines (SVMs), Naïve Bayes and deep learning methods.
         
         
         \subsubsection{Hybrid approach}
@@ -282,22 +281,17 @@ We intend to build a machine learning powered classifier that distinguishes betw
     
     We can tweak the model's threshold of classification in order to achieve a different Precision and Recall metrics
 
-    % \subsection{Python} % Lets talk about his in the methodology 
-    % \subsection{Transformers library}
 
 \section{Literature review}
 The discussed problem in this research has been tried by many researchers over the years with varying results, in this section we intend to highlight the most important results regarding the Arabic language, the Arabic corpora and dialect classification methods that has been concluded from past research.
     
     
     \subsection{The Arabic language}
-    "The Arabic language is a Semitic language originating on the Arabian
-    Peninsula, and it is considered one of the major languages in the world. As a
-    result of the expansion of Islam from Spain to Persia, the Arabic language is
-    spread across many countries." \cite{alshutayri}
+    While the Arabic countries talks to each other in Modern Standard Arabic (\emph{MSA}), Arabic countries do not talk in MSA within themselves, they usually have a regional specific dialect. In this section, we'll detail the work made to document and breakdown dialects.
         
         
         \subsubsection{Arabic dialects}
-        Dividing Arabic into different dialects is not a standardized task as dialects shift and change depending on the time and how much precision we intend to administer in our breakdown. Researchers working on this problem have found various breakdowns that we'll discuss. 
+        Dividing Arabic into different dialects is not a standardized task as dialects shift and change depending on the time and how much precision we intend to administer in our breakdown. Researchers working on this problem have found various breakdowns that we'll discuss.
         
         Habash (2010) has suggested the following breakdown, while adding "and should not be taken to mean that all members of any dialect group are completely homogenous linguistically" \cite{habash}.
         \begin{enumerate}
@@ -321,9 +315,9 @@ The discussed problem in this research has been tried by many researchers over t
         
         
     \subsection{Existing Arabic text corpora}
-    The problem of dialect classification has been studied in the past with many studies building their own corpora, here we'll examine the most prominent corporas.
+    The problem of dialect classification has been studied in the past with many studies building their own corpora, here we'll examine the most prominent of corpora.
     
-    In 2015 Shoufan and Alameri conducted a literature review, in which they summarised the advancments in NLP for dialectal Arabic\cite{shoufan_alameri_2015_natural} in the following comprehensive table. Bear in mind that the table includes more than text analysis and also includes speech analysis.
+    In 2015 Shoufan and Alameri conducted a literature review, in which they summarised the advancements in NLP for dialectal Arabic\cite{shoufan_alameri_2015_natural} in the following comprehensive table. Bear in mind that the table includes more than text analysis and also includes speech analysis.
     
     \clearpage
     \begin{figure}[h]
@@ -343,7 +337,7 @@ The discussed problem in this research has been tried by many researchers over t
     \clearpage
     
     
-    The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers.\cite{zaidan_burch}\label{txt:aoc}
+    The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers\cite{zaidan_burch}\label{txt:aoc}.
     
     Though the AOC dataset was big enough, it was not annotated fully, which might harm the predicting model's results, so El-Haj et al. (2018) created an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
      
@@ -351,7 +345,7 @@ The discussed problem in this research has been tried by many researchers over t
      
     There has been work in using social media as a valid source of dialectic data, creating the SMADC dataset, which scraped and annotated data from Twitter and Facebook\cite{alshutayri_inproceedings}.
     
-    Another dataset is the The Dialectal Arabic Tweets (DART), which manually annotated over 25k tweets in Maghrebi, Egyptian, Levantine, Iraqi, and Gulf\cite{alsarsour-etal-2018-dart}
+    Another dataset is the The Dialectal Arabic Tweets (DART), which manually annotated over 25k tweets in Maghrebi, Egyptian, Levantine, Iraqi, and Gulf\cite{alsarsour-etal-2018-dart}.
      
      
     \subsection{Dialect classification results}
@@ -359,7 +353,7 @@ The discussed problem in this research has been tried by many researchers over t
         
         Firstly, Zaidan-Burch (2014), the researchers behind the AOC dataset mentioned in section \ref{txt:aoc}, using "SRILM toolkit to build word trigram models, with modified Kneser-Ney as a smoothing method, and report the results of 10-fold cross validation"\cite{zaidan_burch} have achieved an accuracy of 0.694 at classifying "MSA vs. LEV vs. GLF vs. EGY"\cite{zaidan_burch}.
         
-        Cotterell-Burch (2014) have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}
+        Cotterell-Burch (2014) have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}.
         
         \begin{figure}[h]
             \includegraphics[scale=0.6]{Figures/results_extended_AOC.png}
