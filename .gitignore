@@ -2,7 +2,8 @@
 */.ipynb_checkpoints/
 # code/data/
 code/train/
-code/models/
+code/models/*
+!code/models/finalized_models/README.md
 code/runs/
 code/2021-09-13-train
 extra_data/D7_data/tweets/tweets.json
