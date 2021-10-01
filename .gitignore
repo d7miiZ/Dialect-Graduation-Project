@@ -7,3 +7,4 @@ code/runs/
 code/2021-09-13-train
 extra_data/D7_data/tweets/tweets.json
 code/preprocessed_data/*.pkl
+*/__pycache__/
