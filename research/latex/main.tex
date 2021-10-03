@@ -204,7 +204,12 @@ We intend to build a machine learning powered classifier that distinguishes betw
             \subsubsubsection{Tokenization}
             Tokenization is the process of breaking down sentences into smaller components such as words called tokens to make it analyzable for computers, it is an important operation in preprocessing text for any NLP task. There are several methods of performing tokenization, such as white tokenization, subword tokenization. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}.
             
-            Tokenization also has limitations for the Arabic language, owing to the complexity of the language, words like "\RL{عقد}" and "\RL{جد}" depending on the context or pronunciation could lead to different meanings, also there are huge differences in formal (which we'll define in section \ref{thearabiclanguage}) and informal Arabic, as well as different dialects having vastly different sentence structure. and not just in Arabic this is also true for most languages, and that is one of the challenges of tokenization.
+            Tokenization also has limitations for the Arabic language, owing to the complexity of the language, words like "\RL{عقد}" and "\RL{جد}" depending on the context or pronunciation could lead to different meanings, So the word
+            "\RL{عقَدَ}".
+            means to tie, which is different from
+            "\RL{عَقَّدَ}".
+            which means to over-complicate.
+            Also there are huge differences in formal (which we'll define in section \ref{thearabiclanguage}) and informal Arabic, as well as different dialects having vastly different sentence structure. and not just in Arabic this is also true for most languages, and that is one of the challenges of tokenization.
     
             
             \subsubsubsection{Word embedding}
@@ -216,7 +221,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
                 \label{fig:wordembedding}
             \end{figure}
             
-            Computers can’t understand natural language, so in order to make computers understand it we have to create a representation for a language that a computer can process, and that is what word embedding do. Word embedding is a term used for the representation of words for text analysis, typically in the form of a real-valued vector that encodes the meaning of the word such that the words that are closer in the vector space are expected to be similar in meaning \cite{jurafsky_martin_2000}. There are several word embedding models, and generally all models share the concept of context to determine how close are words to each other, “You shall know a word by the company it keeps!” (Firth, J. R. 1957:11). Figure \ref{fig:wordembedding} shows a model that learnt the relationships between countries and their capitals without information of what a capital city means.
+            Computers can’t understand natural language, so in order to make computers understand it we have to create a representation for a language that a computer can process, and that is what word embedding do. Word embedding is a representation of words that encodes the semantic meaning of words in vectors, such that words that are similar in meaning are probably going to be close in vector space \cite{jurafsky_martin_2000}. There are several word embedding models, and generally all models share the concept of context to determine how close are words to each other, “You shall know a word by the company it keeps!” (Firth, J. R. 1957:11). Figure \ref{fig:wordembedding} shows a model that learnt the relationships between countries and their capitals without information of what a capital city means.
     
         
     \subsection{Neural networks}
@@ -320,7 +325,7 @@ The discussed problem in this research has been tackled by many researchers over
             \label{fig:cmp}
         \end{figure}
         
-        Alshutayri (2018) also gave a similar breakdown, which is GLF (including Oman), EGY, LEV, NOR (which includes Morocco, Algeria, Tunisia and Libya) and IRQ. Although the breakdown is somewhat general and imprecise, its general enough to be useful in data collection and in classification.
+        Alshutayri also gave a similar breakdown, which is GLF (including Oman), EGY, LEV, NOR (which includes Morocco, Algeria, Tunisia and Libya) and IRQ. Although the breakdown is somewhat general and imprecise, its general enough to be useful in data collection and in classification\cite{alshutayri}.
         
         
     \subsection{Existing Arabic text corpora}
@@ -329,28 +334,28 @@ The discussed problem in this research has been tackled by many researchers over
     In 2015 Shoufan and Alameri conducted a literature review, in which they summarised the advancements in NLP for dialectal Arabic in the following comprehensive table\cite{shoufan_alameri_2015_natural}. Bear in mind that the table includes more than text analysis and also includes speech analysis.
     
     \clearpage
-    \begin{figure}[h]
+    \begin{table}[h]
         \hskip-3cm
         \includegraphics[scale=0.45]{Figures/past_word_1.png}
-        \caption{Dialectical Arabic NLP- Literature Overview (Shoufan and Alameri, 2015)}
+        \caption{Dialectical Arabic NLP- Literature Overview\cite{shoufan_alameri_2015_natural}}
         \label{fig:cmp}
-    \end{figure}
+    \end{table}
     
     \clearpage
-    \begin{figure}[h]
+    \begin{table}[h]
         \hskip-3cm
         \includegraphics[scale=0.45]{Figures/past_work_2.png}
-        \caption{Dialectical Arabic NLP- Literature Overview (Shoufan and Alameri, 2015)}
+        \caption{Dialectical Arabic NLP- Literature Overview\cite{shoufan_alameri_2015_natural}}
         \label{fig:cmp}
-    \end{figure}
+    \end{table}
     \clearpage
     
     
     The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers\cite{zaidan_burch}\label{txt:aoc}.
     
-    Though the AOC dataset was big enough, it was not annotated fully, which might harm the predicting model's results, so El-Haj et al. (2018) created an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
+    Though the AOC dataset was big enough, it was not annotated fully, which might harm the predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
      
-    Another improvment of the AOC dataset came from Cotterell, Callison-Burch (2014), in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}."\cite{cotterell-callison-burch-2014-multi}. As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk.
+    Another improvment of the AOC dataset came from Cotterell and Callison-Burch, in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}.". As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk\cite{cotterell-callison-burch-2014-multi}.
      
     There has been work in using social media as a valid source of dialectic data, creating the Social Media Arabic Dialect Corpus (SMADC) dataset, which scraped and annotated data from Twitter and Facebook\cite{alshutayri_inproceedings}.
     
@@ -361,9 +366,9 @@ The discussed problem in this research has been tackled by many researchers over
         There has been many attempts in solving the problem of this research, many of which use similar strategies. In this section we'll review the highlights of past literature's results.
         
         % https://www.cs.jhu.edu/~ccb/publications/arabic-dialect-corpus.pdf
-        Firstly, Zaidan-Burch (2014), the researchers behind the AOC dataset mentioned in section \ref{txt:aoc}, using "SRILM toolkit to build word trigram models, with modified Kneser-Ney as a smoothing method, and report the results of 10-fold cross validation"\footnote{The SRI Language Modeling Toolkit (SRILM) is a toolkit for building statistical language models}\cite{zaidan_burch}, They have achieved an accuracy of 69.4\% at classifying "MSA vs. LEV vs. GLF vs. EGY"\cite{zaidan_burch}.
+        Zaidan-Burch, the researchers behind the AOC dataset, mentioned in section \ref{txt:aoc} the results they found as well as their methodology. They used a "SRILM toolkit to build word trigram models, with modified Kneser-Ney as a smoothing method, and report the results of 10-fold cross validation"\footnote{The SRI Language Modeling Toolkit (SRILM) is a toolkit for building statistical language models}. They have achieved an accuracy of 69.4\% at classifying "MSA vs. LEV vs. GLF vs. EGY"\cite{zaidan_burch}.
         
-        Cotterell-Burch (2014) have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}.
+        Cotterell-Burch have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}.
         
         \begin{figure}[h]
             \includegraphics[scale=0.6]{Figures/results_extended_AOC.png}
@@ -371,9 +376,9 @@ The discussed problem in this research has been tackled by many researchers over
             \label{fig:extended_aoc_results}
         \end{figure}
         
-        Alshutayri used the SMADC dataset to classify dialects to GLF, NOR, LEV, EGY and IRQ. The researcher used Sequential Minimal Optimization (SMO) algorithm with multinomial Naive Bayes (MNB) with different tokenizers, run via the data analysis tool WEKA to achieve an accuracy of 60.68\%\cite{alshutayri}.
+        Alshutayri used the SMADC dataset to classify dialects to GLF, NOR, LEV, EGY and IRQ. They used Sequential Minimal Optimization (SMO) algorithm with multinomial Naive Bayes (MNB) with different tokenizers, run via the data analysis tool WEKA to achieve an accuracy of 60.68\%\cite{alshutayri}.
         
-        Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 0.6919. The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
+        Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 69.19\% The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
         
         \begin{figure}[h]
             \includegraphics[scale=0.35]{Figures/smadc_simple_voting.png}
@@ -384,7 +389,7 @@ The discussed problem in this research has been tackled by many researchers over
         \subsubsection{Deep learning dialect classification results}
         Most of the research around dialect classification uses traditional text classification methods and deep learning methods are scarcely used, however, the surge of deep learning research has reinvigorated the interest in deep learning text classification.
         
-        Elaraby and Abdul-Mageed (2018) have used many different algorithms including deep learning algorithms such as CNN, CLSTM, LSTM, BiLSTM, BiGRU and Attention BiLSTM which they explain in their paper\cite{elaraby-abdul-mageed-2018-deep} as well as traditional classifiers such as SVMs, Naive Bayes and other.
+        Elaraby and Abdul-Mageed have used many different algorithms including deep learning algorithms such as CNN, CLSTM, LSTM, BiLSTM, BiGRU and Attention BiLSTM which they explain in their paper\cite{elaraby-abdul-mageed-2018-deep} as well as traditional classifiers such as SVMs, Naive Bayes and other.
         
         On the AOC dataset Elaraby and Abdul-Mageed used this dialect split "MSA vs. Egyptian vs. Gulf vs. Levantine" to obtain an accuracy of 82.45\% using the Attention BiLSTM with Abdul-Mageed and et al.'s embeddings\cite{elaraby-abdul-mageed-2018-deep}.
         
@@ -396,7 +401,12 @@ The discussed problem in this research has been tackled by many researchers over
 
 \end{document}
 
-% 2.1: Still (mussaad gimme reference)
-% 3.2: Done except figure 5, lets discuss on thursday
-% 3.3: Done except the researcher, lets discuss on thursday. Also regarding figure 7, accuracy is reported, not precision. Also, weighted voting scored even higher! more details at page 118 here https://etheses.whiterose.ac.uk/23600/1/Areej%20Alshutayri%20Thesis.pdf
-% Every other comment has been addressed!
+% 1-حركات عربي
+% 2-change table to figure
+% 3-stick to one reference type
+% 4-reference tables and figures
+% 5- They used
+% 6- 3.3 rephrased zaidan
+% 7- accuracy vs prisicion
+% 8- change 69
+% 9- Wikipedia embedding defintion
