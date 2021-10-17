@@ -1,0 +1,6 @@
+pandas
+plotly
+sklearn
+torch
+transformers
+optuna
