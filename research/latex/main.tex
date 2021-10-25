@@ -301,13 +301,13 @@ The discussed problem in this research has been tackled by many researchers over
     
     
     \subsection{The Arabic language} \label{txt:thearabiclanguage}
-    Arabic speakers often use Modern Standard Arabic (\emph{MSA}) when they're in a formal setting such as reading the news, though they usually have a regional specific dialect that they talk with in informal settings. In this section we'll detail the work made to document different dialects and the regions they belong to. 
+    Arabic speakers often use Modern Standard Arabic (\emph{MSA}) when they're in a formal setting such as reading the news, though they have a regional dialect that they talk with in informal settings. In this section we'll detail the work made to document and break down different dialects into regions they belong to. 
         
         
         \subsubsection{Arabic dialects}
         Dividing Arabic into different dialects is not a standardized task as dialects shift and change depending on the time and how much precision we intend to administer in our breakdown. Researchers working on this problem have found various breakdowns that we'll discuss.
         
-        Habash (2010) has suggested the following breakdown, while adding "and should not be taken to mean that all members of any dialect group are completely homogenous linguistically" \cite{habash}.
+        Habash has suggested the following breakdown, while adding "and should not be taken to mean that all members of any dialect group are completely homogenous linguistically" \cite{habash}.
         \begin{enumerate}
             \item Egyptian Arabic (EGY) which spans Eygpt and Sudan
             \item  Gulf Arabic (GLF) which spans the Arabic peninsula, Habash adds "although there is a wide range of sub-dialects within it." And "Omani Arabic is included some times."
@@ -353,7 +353,7 @@ The discussed problem in this research has been tackled by many researchers over
     
     The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers\cite{zaidan_burch}\label{txt:aoc}.
     
-    Though the AOC dataset was big enough, it was not annotated fully, which might harm the predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
+    Though the AOC dataset was big enough, it was not annotated fully, which might harm a predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
      
     Another improvment of the AOC dataset came from Cotterell and Callison-Burch, in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}.". As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk\cite{cotterell-callison-burch-2014-multi}.
      
@@ -389,9 +389,9 @@ The discussed problem in this research has been tackled by many researchers over
         \subsubsection{Deep learning dialect classification results}
         Most of the research around dialect classification uses traditional text classification methods and deep learning methods are scarcely used, however, the surge of deep learning research has reinvigorated the interest in deep learning text classification.
         
-        Elaraby and Abdul-Mageed have used many different algorithms including deep learning algorithms such as CNN, CLSTM, LSTM, BiLSTM, BiGRU and Attention BiLSTM which they explain in their paper\cite{elaraby-abdul-mageed-2018-deep} as well as traditional classifiers such as SVMs, Naive Bayes and other.
+        Elaraby and Abdul-Mageed have used many different algorithms including deep learning algorithms such as CNN, CLSTM, LSTM, BiLSTM, BiGRU and Attention BiLSTM which they explain in their paper as well as traditional classifiers such as SVMs, Naive Bayes and others\cite{elaraby-abdul-mageed-2018-deep}.
         
-        On the AOC dataset Elaraby and Abdul-Mageed used this dialect split "MSA vs. Egyptian vs. Gulf vs. Levantine" to obtain an accuracy of 82.45\% using the Attention BiLSTM with Abdul-Mageed and et al.'s embeddings\cite{elaraby-abdul-mageed-2018-deep}.
+        On the AOC dataset Elaraby and Abdul-Mageed used this dialect split "MSA vs. Egyptian vs. Gulf vs. Levantine" to obtain an accuracy of 82.45\% using the Attention BiLSTM with Abdul-Mageed, et al. embeddings\cite{elaraby-abdul-mageed-2018-deep}.
         
         It's also noteable that the traditional classifiers won over deep learning classifiers only on the "EGY, GLF, and LEV" three way classification split\cite{elaraby-abdul-mageed-2018-deep}.
         
