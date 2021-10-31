@@ -140,7 +140,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
 \begin{RLtext}
 اللغة العربية من أقدم اللغات المستخدمة بكثرة حاليا، ونتيجة لذلك، الكثير من المناطق المتحدثة للعربية أنشأت لهجات مخصصة بمناطقهم. فعلى سبيل المثال، الكثير من المناطق المجاورة للخليج العربي تتحدث لهجة مختلفة بشدة عن لهجات المناطق الشامية. يعتزم الباحثون على أتمتة عملية التعرف على اللهجات من خلال تحليل قطعة من النص.
 
-البحث له العديد من التطبيقات، وأهمها هو في تحليل النصوص العربية، فمثلا استخدامه في التعرف على مناطق عملاء جهة معينة عن طريق تحليل التقاييم والتعليقات المضافة على منتجاتهم، مما يمكن الجهة على التعرف على عملائهم بشكل أدق. كذلك يمكن استخدامه للتنبؤ بمنشأ مرسل رسالة مجهولة عن طريق التعرف على منطقة انتمائه.
+البحث له العديد من التطبيقات، وأهمها هو في تحليل النصوص العربية، فمثلا استخدامه في التعرف على مناطق عملاء جهة معينة عن طريق تحليل التقاييم والتعليقات المضافة على منتجاتهم، مما يمكن الجهة على التعرف على عملائهم بشكل أدق. كذلك يمكن استخدامه للتنبؤ بمنشأ مرسل رسالة مجهولة عن طريق التعرف على منطقة نشأته.
 
 من أهم التحديات في تصنيف اللهجات هي تقسيم البيانات لأصناف من اللهجات. فعلى سبيل المثال، المملكة العربية السعودية والإمارات العربية المتحدة يتحدثون بلهجات مختلفة إذا حصرنا النظر عليهم، ولكن يشبهون بعض حين تتم مقارنتهم مع اللهجات الشامية. سيختار الباحثون مجموعة مناسبة من اللهجات حيث تكون سهلة للنظام في التعرف عليها، ولكن معقدة كفاية لكي تكون مفيدة.
 
@@ -158,7 +158,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
 
     \subsection{Problem statement}
     
-    Dialects are formed mainly due to regional separation between the Arab world. This separation reduces interaction between different regions, and as a result of that, many Arabic speaking regions have formed dialects exclusive to their own. For example, many countries surrounding the Arabic Gulf have formed a dialect different to countries in the Levantine region. The research’s main problem is how to identify and predict dialect types from written text.
+    Dialects are formed mainly due to regional separation between the Arab world. This separation reduces interaction between different regions, and as a result of that, many Arabic speaking regions have formed dialects exclusive to their own. For example, many countries surrounding the Arabic Gulf have formed a dialect different to countries in the Levantine region. The research’s main problem is how to identify and predict dialect types from text.
 
  
     \begin{figure}[h]
@@ -173,7 +173,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
     \subsection{Goals and objectives}
     
     The goal of this research is to analyze and understand Arabic text to classify the dialect of any piece of Arabic text.
-    The objective to implement the most appropriate state of the art NLP model that helps in achieving the best possible accuracy which correlates to correctly classifying what dialect the text is from.
+    The objective is to implement the most appropriate state of the art NLP model that helps in achieving the best possible accuracy which correlates to correctly classifying what dialect the text is from.
 
     \subsection{Proposed Solution}
     This research will contribute in solving Arabic dialect detection by using one of the latest advancements in the field of natural language processing.
@@ -202,14 +202,14 @@ We intend to build a machine learning powered classifier that distinguishes betw
 
 
             \subsubsubsection{Tokenization}
-            Tokenization is the process of breaking down sentences into smaller components such as words called tokens to make it analyzable for computers, it is an important operation in preprocessing text for any NLP task. There are several methods of performing tokenization, such as white tokenization, subword tokenization. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}.
+            Tokenization is the process of breaking down input text into smaller components called tokens so that its easily analyzable for computers. It is an important step in preprocessing text for any NLP task. There are several methods for performing tokenization, such as white tokenization, subword tokenization and others. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}.
             
             Tokenization also has limitations for the Arabic language, owing to the complexity of the language, words like "\RL{عقد}" and "\RL{جد}" depending on the context or pronunciation could lead to different meanings, So the word
             "\RL{عقَدَ}".
             means to tie, which is different from
             "\RL{عَقَّدَ}".
             which means to over-complicate.
-            Also there are huge differences in formal (which we'll define in section \ref{thearabiclanguage}) and informal Arabic, as well as different dialects having vastly different sentence structure. and not just in Arabic this is also true for most languages, and that is one of the challenges of tokenization.
+            Also there are huge differences in formal and informal Arabic (more on that in section \ref{txt:thearabiclanguage}), as well as different dialects having vastly different sentence structure. and not just in Arabic this is also true for most languages, and that is one of the challenges of tokenization.
     
             
             \subsubsubsection{Word embedding}
@@ -225,7 +225,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
     
         
     \subsection{Neural networks}
-        Neural networks are a sub-field of machine learning, and also the parent field of deep learning. Neural networks are made up of layers of neurons and work like interconnected nodes inspired by the neurons inside the brain. By taking in data, they are able to recognize hidden patterns and and correlations in unprocessed data and use said patterns to cluster, classify and predict the data, among other applications.
+        Neural networks are a sub-field of machine learning, and also the parent field of deep learning. Neural networks are made up of layers of neurons and work like interconnected nodes inspired by the neurons inside the brain. By taking in data, they are able to recognize hidden patterns and correlations in unprocessed data and use said patterns to cluster, classify and predict the data, among other applications.
         
         A typical neural network architecture contains the following:
         \begin{enumerate}
@@ -353,7 +353,7 @@ The discussed problem in this research has been tackled by many researchers over
     
     The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers\cite{zaidan_burch}\label{txt:aoc}.
     
-    Though the AOC dataset was big enough, it was not annotated fully, which might harm a predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
+    Though the AOC dataset was big enough, it was not annotated fully, which might harm a predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
      
     Another improvment of the AOC dataset came from Cotterell and Callison-Burch, in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}.". As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk\cite{cotterell-callison-burch-2014-multi}.
      
