@@ -201,7 +201,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
             In this section we will discuss the most important steps in preprocessing, such as tokenization and converting text to embeddings.
 
 
-            \subsubsubsection{Tokenization}
+            \subsubsubsection{Tokenization} \label{txt:tokenization_section}
             Tokenization is the process of breaking down input text into smaller components called tokens so that its easily analyzable for computers. It is an important step in preprocessing text for any NLP task. There are several methods for performing tokenization, such as white tokenization, subword tokenization and others. White space tokenization breaks sentences into words that we call tokens, while this is useful for languages like English and French, it is needed to perform some additional steps for languages like Chinese and Japanese where words are not separated by spaces. While subword tokenization breaks down words into different tokens, so for example, "Unfriendly" is broken down to "Un", "friend" and "ly" \cite{subword_tokenization}.
             
             Tokenization also has limitations for the Arabic language, owing to the complexity of the language, words like "\RL{عقد}" and "\RL{جد}" depending on the context or pronunciation could lead to different meanings, So the word
@@ -258,7 +258,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
         While deep learning isn't accurately defined, what differentiates deep learning models from other neural networks models is primarily the number of layers and the time it takes to train. An example of a deep learning model is \emph{Convolutional Neural Networks} (CNNs) which are commonly used with images. Extracting meaning from a 2D structure such as images can be quite hard for traditional machine learning algorithms because of the inherent complexity of the patterns in image data, this complexity can be tackled by deep learning models though they require a large number of layers as well as long training time.
         
          
-        \subsubsection{Transformers}
+        \subsubsection{Transformers} \label{txt:transformers_section}
         Since its introduction in 2017 by the google research team, its rapid growth dominated the NLP field and became a standard for any encoder/decoder model today\cite{wolf-etal-2020-transformers}. the transformer takes advantage of parallelization unlike Recurrent Neural Networks (RNNs), which process data in a sequential order, which is computationally more expensive compared to the transformer model\cite{46201}. In a high level overview, its model architecture can be divided into two major components, an encoder and a decoder. An encoder maps the input sequence to a numeric representation that holds information about the input sequence, the decoder given the output of the encoder generates a sequence of symbols one element at a time, the model consumes the previously generated symbols as additional input when generating the next\cite{46201}.
 
         There are many models used today that are built on the transformer architecture especially in NLP, for example, \emph{Bidirectional Encoder Representations from Transformers} (BERT) is a popular transformer-based model. Also, OpenAI's \emph{Generative Pre-trained Transformer} (GPT) models are transformer models that garnered wide attention for being excellent in imitating human produced text.
@@ -436,49 +436,68 @@ The discussed problem in this research has been tackled by many researchers over
             % Read first character of every word
         
         \subsection{Preprocessing}
-        The researchers used some preprocessing techniques that helps in increasing the models preformance and speed, like Tokenization, Segmentation and Embeddings which we will discuss each in the next sections.
-        % Insert brief two line overview here if you want
-        % Farasa, mention it and mention what we used it for (ANYWHERE, NOT NESSCCARLY HERE)
+        We used preprocessing techniques that help in transforming the data to a represntation the model understands, like tokenization and segmentation which we will discuss in this section.
         
             \subsubsection{Tokenization}
-            % Tokenization (with examples, maybe use tables)
-            Tokenization is a common task of NLP, tokenization is done by separating a text document into smaller units which is called tokens.
+            As we discussed in section \ref{txt:tokenization_section} tokenization is an essential task for NLP problems. We'll be using tokenization to clean our dataset and transform it to be ready for classification.
             
-            Tokens can be anything the implementer wants but there are some common tokens that are used like separating by word, character or sub-words, an example of arabic tokenization for \RL{اللغة العربية} sentence would be, for word tokenization it will be like this \RL{اللغة\#العربية} where \# works as a separator and for character tokenization it will be like this \RL{ا\#ل\#ل\#غ\#ة\#ا\#ل\#ع\#ر\#ب\#ي\#ة} and for sub-words tokenization it will be like this \RL{ال\#لغة\#ال\#عربية}.
+            While tokenizing our dataset we'll filter any non-Arabic tokens that hasn't been already filtered, such as text from other languages, emojies and other symbols. We also will remove and Arabic diacritics such as fatha, damma, kasra and so on. so the following word \RL{مُذَكِّراتِهِ} 
+            will be transformed to \RL{مذكراته}, this should help the model group similar words, albeit lost a bit of accuracy.
+            % Tokens can be anything the implementer wants but there are some common tokens that are used like separating by word, character or sub-words, an example of arabic tokenization for \RL{اللغة العربية} sentence would be, for word tokenization it will be like this \RL{اللغة\#العربية} where \# works as a separator and for character tokenization it will be like this \RL{ا\#ل\#ل\#غ\#ة\#ا\#ل\#ع\#ر\#ب\#ي\#ة} and for sub-words tokenization it will be like this \RL{ال\#لغة\#ال\#عربية}.
             
-            Tokenization is an important part of the preprocessing becasue of how most deep-learing models work, for example the Transformers based models (which the researchers use) process raw text at token level.
+            % Tokenization is an important part of the preprocessing becasue of how most deep-learing models work, for example the Transformers based models (which the researchers use) process raw text at token level.
             
-            The researchers didn't have to make a tokenization function because we made use of the tokenization function that is internally integrated in AraBERT (maybe cite here).
+            % The researchers didn't have to make a tokenization function because we made use of the tokenization function that is internally integrated in AraBERT (maybe cite here).
+            % Lets mention this in the implementation, actually
             
             \subsubsection{Segmentation}
-            % Segmentation (with examples, maybe use tables) 
-            Word segmentation is one of the most important pre-processing steps for many NLP task, especially for rich languages like Arabic.
+            Word segmentation is a preprocessing step for many NLP tasks, especially when dealing with rich languages like Arabic.
             
-            Arabic word segmentation work by separating the suffix and prefix that is attached to a stem word, for example the word \RL{العربية} can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stem word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model.
+            Arabic word segmentation works by separating the suffixes and prefixes attached to any given word, a simple example can be seen with the word \RL{العربية} which can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stemmed word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model. Another more sophisticated example is shown in Figure \ref{fig:arabic_segmentation}
             
-            The researchers didn't have to make a segmentation function because we made use of the segmentation function that is internally integrated in AraBERT which uses Farasa segmenter\cite{Farasa}.
+            \begin{figure}[h]
+                \includegraphics[scale=1]{Figures/arabic_segmentation.png}
+                \caption{Example of Arabic word segmentation.\cite{arabic_segmentation}}
+                \label{fig:arabic_segmentation}
+            \end{figure}
             
-            \subsection{Data representation}
-            % Data representation (introduce contextualized embeddings briefly)
-            In this section the researchers will discuss how did they represent the text so that it will be understood by the computer.
-            
-            \subsubsection{Embeddings}
-            Computers can't understand normal text because it can only see it as a bunch of binary numbers and because of that it can't understand the meanings of words, so the solution to that is embeddings, embeddings works by assigning a unique vector of numbers to a specific word,  ideally an embedding captures some of the semantics of the text by placing semantically similar text close together in the embedding space, this works by finding what other words it often appears next to, so for example after finding the embeddings list or dictionary and you want to know what is the most similar words to \RL{العربية} you would have to calculate it's vector and other vectors distance in the list to measures the similarity and relationship between them.
-            
-            One problem of normal embeddings is that it doesn't capture the contextual semantic for the word, for example \RL{ذهبنا الى البر ثم اكلنا خبز البر} here \RL{البر} doesn't have the same meaning because of the context but in normal embeddings it will have and this is a problem, so the solution to that is what is known as contextual embeddings.
-            
-            \subsubsubsection{Contextual Embeddings}
-            The diffrenace between normal embeddings and contextual embeddings is that the word embeddings capture word semantics in context such that it can represent differently under different context even though it is same word, one example of that is ELMo which BERT uses it internally.
-            
-            ELMo gained its language understanding from being trained to predict the next word in a sequence of words, ELMo also goes a step further and tries to predict previous word so it can get a sense of the whole sentnce.
-        
+            % The researchers didn't have to make a segmentation function because we made use of the segmentation function that is internally integrated in AraBERT which uses Farasa segmenter\cite{Farasa}.
+            % Lets mention this in the implementation, actually
         
         % Hawzen Domain
         \subsection{BERT}
             \subsubsection{BERT overview}
-            \cite{BERT}
+            After the release of the transformer model that we talked about in section \ref{txt:transformers_section} in 2018 Google research released the Bidirectional Encoder Representations from Transformers, \emph{BERT}. Leveraging the attention mechanism and the parallel encoder part of transformers, BERT tries to model a sequence bidirectionally, i.e. the output of the model doesn't need to be after the end of the sequence. This property allows us to model many kinds of problems, one of which is text classification, which we'll talk about.\cite{BERT}
             
             \subsubsection{Using BERT in text classification}
+            Since BERT outputs a vector for each input token, we can append a special token \emph{CLS} at the beginning of the input sequence that represents classification, then we can use the output from that token to perform classification from and fine-tune BERT to optimize against our classification loss. 
+            
+            BERT is usually trained by predicting a masked 15\% of the input tokens that we transform to a \emph{MASK} special token, as well as giving it two sentences separated by a special \emph{SEP} token and optimizing against weather those two sentences are related or not, this naturally makes BERT a great fit for many problems such as text summarization, question answering as well as generating contextual embeddings.\cite{BERT}
+            
+            
+            
+            \begin{figure}[h]
+                \includegraphics[scale=0.52]{Figures/BERT_uses.png}
+                \caption{Different ways to use BERT.\cite{BERT}}
+                \label{fig:different_ways_to_use_BERT}
+            \end{figure}
+            
+            
+            
+            \subsubsection{Contextual Embeddings}
+            % Computers can't understand normal text because it can only see it as a bunch of binary numbers and because of that it can't understand the meanings of words, so the solution to that is embeddings, embeddings works by assigning a unique vector of numbers to a specific word,  ideally an embedding captures some of the semantics of the text by placing semantically similar text close together in the embedding space, this works by finding what other words it often appears next to, so for example after finding the embeddings list or dictionary and you want to know what is the most similar words to \RL{العربية} you would have to calculate it's vector and other vectors distance in the list to measures the similarity and relationship between them.
+            % Sorry, I shouldn't have let you write this. It isnt needed
+            
+            One problem traditional embeddings face is that it doesn't capture the contextual semantic information the word represents, for example \RL{ذهبنا الى البر ثم اكلنا خبز البر} here we used the word \RL{البر} in two contexts, traditional embeddings will represent those two words as the with the same vector, embeddings aware of the context they're in are known as contextual embeddings.
+            
+            
+            The first architecture that implements this sort of idea is Embeddings from Language Models (\emph{ELMo}), which does this by taking the hidden layers of words that come before and after the word we want the embeddings for, then multiplying this the hidden layer by a weighing vector then adding the result to the original word's embedding, this essentially represents nudging the embedding towards the context the word is in.
+            The same idea is also implemented by BERT.
+            
+            % The difference between normal embeddings and contextual embeddings is that the word embeddings capture word semantics in context such that it can represent differently under different context even though it is same word, one example of that is ELMo which BERT uses it internally.
+            % Repeat of same info
+            % BERT doesnt use ELMo
+        
             
     
     \section{Experimental design}
