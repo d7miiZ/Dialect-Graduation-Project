@@ -175,7 +175,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
     The goal of this research is to analyze and understand Arabic text to classify the dialect of any piece of Arabic text.
     The objective is to implement the most appropriate state of the art NLP model that helps in achieving the best possible accuracy which correlates to correctly classifying what dialect the text is from.
 
-    \subsection{Proposed Solution}
+    \subsection{Proposed solution}
     This research will contribute in solving Arabic dialect detection by using one of the latest advancements in the field of natural language processing.
     
     
@@ -268,13 +268,13 @@ We intend to build a machine learning powered classifier that distinguishes betw
         One can approach the problem of dialect prediction in a number of ways, We will define and discuss some different dialect recognition approaches that differ in how they work.
 
         
-        \subsubsection{Rule-Based approach}
+        \subsubsection{Rule-based approach}
         Rule-based approach relies in written curated instructions made by humans to identify selected parts of the text that match a certain logic or found in dictionaries, a popular example in text classifications is to count the number of each word that relate to a category and the highest word count for a category classifies the text in that category. 
         
         Another example would be the Lexical Functional Grammar (LFG). "The LFG system incorporates a richly annotated lexicon containing functional and semantic information."\cite{hassan_2010}.
 
         
-        \subsubsection{Automatic Machine-learning approach} \label{txt:simple_voting}
+        \subsubsection{Automatic machine-learning approach} \label{txt:simple_voting}
         The automatic approach in dialect recognition is based on machine learning, where it tries to build a statistical model that learns by analysing the training data after choosing an appropriate algorithm and applying NLP techniques. The most prominent algorithms in text classification would be support vector machines (SVMs), Naïve Bayes and deep learning methods.
         
         
@@ -357,33 +357,33 @@ The discussed problem in this research has been tackled by many researchers over
      
     Another improvment of the AOC dataset came from Cotterell and Callison-Burch, in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}.". As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk\cite{cotterell-callison-burch-2014-multi}.
      
-    There has been work in using social media as a valid source of dialectic data, creating the Social Media Arabic Dialect Corpus (SMADC) dataset, which scraped and annotated data from Twitter and Facebook\cite{alshutayri_inproceedings}.
+    There has been work in using social media as a valid source of dialectic data, creating the Social Media Arabic Dialect Corpus (SMADC) dataset, which scraped and annotated data from Twitter and Facebook\cite{alshutayri_inproceedings}.\label{txt:SMADC_talk}
     
     Another dataset is the The Dialectal Arabic Tweets (DART), which manually annotated over 25k tweets in Maghrebi, Egyptian, Levantine, Iraqi, and Gulf\cite{alsarsour-etal-2018-dart}.
      
      
     \subsection{Dialect classification results}
-        There has been many attempts in solving the problem of this research, many of which use similar strategies. In this section we'll review the highlights of past literature's results.
-        
-        % https://www.cs.jhu.edu/~ccb/publications/arabic-dialect-corpus.pdf
-        Zaidan-Burch, the researchers behind the AOC dataset, mentioned in section \ref{txt:aoc} the results they found as well as their methodology. They used a "SRILM toolkit to build word trigram models, with modified Kneser-Ney as a smoothing method, and report the results of 10-fold cross validation"\footnote{The SRI Language Modeling Toolkit (SRILM) is a toolkit for building statistical language models}. They have achieved an accuracy of 69.4\% at classifying "MSA vs. LEV vs. GLF vs. EGY"\cite{zaidan_burch}.
-        
-        Cotterell-Burch have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}.
-        
-        \begin{figure}[h]
-            \includegraphics[scale=0.6]{Figures/results_extended_AOC.png}
-            \caption{"Experiments on newspaper commentary data (accuracy reported)."\cite{cotterell-callison-burch-2014-multi}}
-            \label{fig:extended_aoc_results}
-        \end{figure}
-        
-        Alshutayri used the SMADC dataset to classify dialects to GLF, NOR, LEV, EGY and IRQ. They used Sequential Minimal Optimization (SMO) algorithm with multinomial Naive Bayes (MNB) with different tokenizers, run via the data analysis tool WEKA to achieve an accuracy of 60.68\%\cite{alshutayri}.
-        
-        Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 69.19\% The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
-        
-        \begin{figure}[h]
-            \includegraphics[scale=0.35]{Figures/smadc_simple_voting.png}
-            \caption{Simple voting matrix representation of \RL{ههههههههههه خليتني ليش بهالطريقة بس للحين بهالشكل}\cite{alshutayri}}
-        \end{figure}
+    There has been many attempts in solving the problem of this research, many of which use similar strategies. In this section we'll review the highlights of past literature's results.
+    
+    % https://www.cs.jhu.edu/~ccb/publications/arabic-dialect-corpus.pdf
+    Zaidan-Burch, the researchers behind the AOC dataset, mentioned in section \ref{txt:aoc} the results they found as well as their methodology. They used a "SRILM toolkit to build word trigram models, with modified Kneser-Ney as a smoothing method, and report the results of 10-fold cross validation"\footnote{The SRI Language Modeling Toolkit (SRILM) is a toolkit for building statistical language models}. They have achieved an accuracy of 69.4\% at classifying "MSA vs. LEV vs. GLF vs. EGY"\cite{zaidan_burch}.
+    
+    Cotterell-Burch have extended the AOC data, also mentioned in section \ref{txt:aoc} and trained using two algorithms, SVM and Naive Bayes using unigram, bigram and trigram features\cite{cotterell-callison-burch-2014-multi}. The results are displayed in figure \ref{fig:extended_aoc_results}.
+    
+    \begin{figure}[h]
+        \includegraphics[scale=0.6]{Figures/results_extended_AOC.png}
+        \caption{"Experiments on newspaper commentary data (accuracy reported)."\cite{cotterell-callison-burch-2014-multi}}
+        \label{fig:extended_aoc_results}
+    \end{figure}
+    
+    Alshutayri used the SMADC dataset to classify dialects to GLF, NOR, LEV, EGY and IRQ. They used Sequential Minimal Optimization (SMO) algorithm with multinomial Naive Bayes (MNB) with different tokenizers, run via the data analysis tool WEKA to achieve an accuracy of 60.68\%\cite{alshutayri}.
+    
+    Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 69.19\% The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
+    
+    \begin{figure}[h]
+        \includegraphics[scale=0.35]{Figures/smadc_simple_voting.png}
+        \caption{Simple voting matrix representation of \RL{ههههههههههه خليتني ليش بهالطريقة بس للحين بهالشكل}\cite{alshutayri}}
+    \end{figure}
         
         
         \subsubsection{Deep learning dialect classification results}
@@ -395,18 +395,109 @@ The discussed problem in this research has been tackled by many researchers over
         
         It's also noteable that the traditional classifiers won over deep learning classifiers only on the "EGY, GLF, and LEV" three way classification split\cite{elaraby-abdul-mageed-2018-deep}.
         
+    
+    \section{Methodology}
+        % big graph, detailed and has example input and example output (use something like drawio)
+        
+        % Hawzen Domain
+            \subsection{The SMADC dataset}
+            In this research we'll be using the Social Media Arabic Dialect Corpus (\emph{SMADC}) dataset that we talked about in section \ref{txt:SMADC_talk}. We'll briefly note important details about its collection, filtration and annotation.
+            
+                \subsubsection{Collection and filteration}
+                SMADC's corpus is collected from three different sources, Facebook, Twitter and online newspapers. We'll briefly go over the details of collection for each source. 
+                
+                For Twitter documents, the researchers collected 210,915 tweets, then proceeded to label tweets based on the existence of pre-defined seed words and the location of the tweet's sender as well as the Geo-location of the tweet. For Facebook documents, the researches scraped 2,888,788 comments from 422,070 Facebook posts. They annotated the comments based on the country of the account the post was from. For online newspapers, the researchers collected 10,096 comments from 25 newspapers and were automatically labeled based on the newspaper's origin country. The researchers filtered Facebook and Twitter documents automatically by removing hashtags, emojies, redundant characters and so on.\cite{alshutayri}
+                
+                Though this simple annotation was manually checked and corrected if it were to be false, we'll discuss more of that in section \ref{txt:annotation}.
+                
+                
+                
+                \subsubsection{Annotation} 
+                \label{txt:annotation}    
+                After automatically annotating the documents in the way we described earlier, the researcher has used novel manual annotation techniques to annotate a part of the dataset. They had created an interactive online quiz where users would log in and manually annotate a number documents. Control documents was placed to check if the user is not randomly choosing options, and annotation conflicts were resolved by choosing majority voting. Resulting in 24,060 manually annotated documents. \cite{alshutayri}
+                
+        
+        % D7 Domain
+        
+            % Moon
+            % Arrow
+            % Looking
+            % Leading
+            % Creating
+            
+            % Doing
+            % Embedding
+            % Synthesising
+            % Nurturing
+            % Tempting
+            
+            % 0
+            
+            % Read first character of every word
+        
+        \subsection{Preprocessing}
+        The researchers used some preprocessing techniques that helps in increasing the models preformance and speed, like Tokenization, Segmentation and Embeddings which we will discuss each in the next sections.
+        % Insert brief two line overview here if you want
+        % Farasa, mention it and mention what we used it for (ANYWHERE, NOT NESSCCARLY HERE)
+        
+            \subsubsection{Tokenization}
+            % Tokenization (with examples, maybe use tables)
+            Tokenization is a common task of NLP, tokenization is done by separating a text document into smaller units which is called tokens.
+            
+            Tokens can be anything the implementer wants but there are some common tokens that are used like separating by word, character or sub-words, an example of arabic tokenization for \RL{اللغة العربية} sentence would be, for word tokenization it will be like this \RL{اللغة\#العربية} where \# works as a separator and for character tokenization it will be like this \RL{ا\#ل\#ل\#غ\#ة\#ا\#ل\#ع\#ر\#ب\#ي\#ة} and for sub-words tokenization it will be like this \RL{ال\#لغة\#ال\#عربية}.
+            
+            Tokenization is an important part of the preprocessing becasue of how most deep-learing models work, for example the Transformers based models (which the researchers use) process raw text at token level.
+            
+            The researchers didn't have to make a tokenization function because we made use of the tokenization function that is internally integrated in AraBERT (maybe cite here).
+            
+            \subsubsection{Segmentation}
+            % Segmentation (with examples, maybe use tables) 
+            Word segmentation is one of the most important pre-processing steps for many NLP task, especially for rich languages like Arabic.
+            
+            Arabic word segmentation work by separating the suffix and prefix that is attached to a stem word, for example the word \RL{العربية} can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stem word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model.
+            
+            The researchers didn't have to make a segmentation function because we made use of the segmentation function that is internally integrated in AraBERT which uses Farasa segmenter\cite{Farasa}.
+            
+            \subsection{Data representation}
+            % Data representation (introduce contextualized embeddings briefly)
+            In this section the researchers will discuss how did they represent the text so that it will be understood by the computer.
+            
+            \subsubsection{Embeddings}
+            Computers can't understand normal text because it can only see it as a bunch of binary numbers and because of that it can't understand the meanings of words, so the solution to that is embeddings, embeddings works by assigning a unique vector of numbers to a specific word,  ideally an embedding captures some of the semantics of the text by placing semantically similar text close together in the embedding space, this works by finding what other words it often appears next to, so for example after finding the embeddings list or dictionary and you want to know what is the most similar words to \RL{العربية} you would have to calculate it's vector and other vectors distance in the list to measures the similarity and relationship between them.
+            
+            One problem of normal embeddings is that it doesn't capture the contextual semantic for the word, for example \RL{ذهبنا الى البر ثم اكلنا خبز البر} here \RL{البر} doesn't have the same meaning because of the context but in normal embeddings it will have and this is a problem, so the solution to that is what is known as contextual embeddings.
+            
+            \subsubsubsection{Contextual Embeddings}
+            The diffrenace between normal embeddings and contextual embeddings is that the word embeddings capture word semantics in context such that it can represent differently under different context even though it is same word, one example of that is ELMo which BERT uses it internally.
+            
+            ELMo gained its language understanding from being trained to predict the next word in a sequence of words, ELMo also goes a step further and tries to predict previous word so it can get a sense of the whole sentnce.
+        
+        
+        % Hawzen Domain
+        \subsection{BERT}
+            \subsubsection{BERT overview}
+            \cite{BERT}
+            
+            \subsubsection{Using BERT in text classification}
+            
+    
+    \section{Experimental design}
+    % Experimental design: includes all variables in experiment
+    % Add brief two line intro if you think its needed
+    
+        \subsection{Datasets}
+        % Overview of what does the SMADC dataset contain (numbers on how many records, their distribution (you can add a bar graph too))
+        % Anything more you want to add
+        
+        \subsection{Algorithms}
+        % Talk about using AraBERT models (general overview of implementation, how were they trained, etc.)
+        % Talk about different BERT variables (warmup, learning_rate, etc. See code for more)
+        % Talk about optimizer we used (see code)
+        % Anything more you want to add
+
+
 
 \bibliographystyle{plain} % We choose the &quot;plain&quot; reference style
 \bibliography{cite.bib} % Entries are in the &quot;refs.bib&quot; file</code></pre>
 
 \end{document}
-
-% 1-حركات عربي
-% 2-change table to figure
-% 3-stick to one reference type
-% 4-reference tables and figures
-% 5- They used
-% 6- 3.3 rephrased zaidan
-% 7- accuracy vs prisicion
-% 8- change 69
-% 9- Wikipedia embedding defintion
