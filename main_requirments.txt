@@ -4,3 +4,4 @@ sklearn
 torch
 transformers
 optuna
+pyarabic
