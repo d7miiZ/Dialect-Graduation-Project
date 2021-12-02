@@ -505,10 +505,40 @@ The discussed problem in this research has been tackled by many researchers over
     % Add brief two line intro if you think its needed
     
         \subsection{Datasets}
+        The researchers found some difficulties to make sure that their dataset is polished. They started to remove the noises of their dataset by preprocessing their data, to assure that it will improve the accuracy and won’t ruin the machine learning classifiers task. Notable noises such as writing a nationality that conflicts with the label, non-Arabic characters, spelling mistakes, etc…
+        
+        \begin{figure}[h]
+             % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.80]{Figures/noises_table.PNG}
+            \label{fig:cmp}
+        \end{figure}
+        
+        In their final records, SMADC dataset contained 1,088,578 documents. which consisted of 812,849 Facebook comments, 9,440 online newspaper comments, and 266,289 Twitter tweets. And each one of them are distributed in the five labels (GLF, EGY, NOR, LEV and IRQ) The highest rate of the collected data was from Facebook comments as seen in Figure 9.
+        \begin{figure}[h]
+            % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.85]{Figures/SMADC dataset chart.PNG}
+            \caption{SMADC dataset chart}
+            \label{fig:cmp}
+        \end{figure}
+        
         % Overview of what does the SMADC dataset contain (numbers on how many records, their distribution (you can add a bar graph too))
         % Anything more you want to add
         
         \subsection{Algorithms}
+        After the success of BERT and the growing development of machine learning models and state-of-art techniques, it has become important to discover a way to process and understand the Arabic language in a much effective way. Wissam Antoun and many researchers developed AraBERT, they pre-trained BERT to be strongly focused on Arabic language and they managed to fulfill state-of-the-art performance by testing it on most Arabic NLP tasks. In their pre-training they used the \emph{Masked Language Modeling} (MLM), which it requires to understand the left and right context without any labeled data by just using a raw text.  Small percentage of input tokens are selected for replacement. Those tokens are replaced 80\% with the [MASK] token, and 20\% either a random token or the original token\cite{wissam}. Example:
+        
+        \begin{figure}[h]
+            % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.8]{Figures/arabert_example.PNG}
+            \label{fig:cmp}
+        \end{figure}
+        
+        They covered 1.5 billion words from different medias and articles from diverse Arab countries. Some BERT variables are used to improve the performance, learning rate is essential for our training to achieve optimality without weakening the accuracy. the main idea is to warmup number of steps wherein the learning rate linearly increases from the minimal to the maximum and it linearly decreases over the remaining number of steps. A better learning rate will help us to decrease the amount of training hours and save our resources.
+        
+        
         % Talk about using AraBERT models (general overview of implementation, how were they trained, etc.)
         % Talk about different BERT variables (warmup, learning_rate, etc. See code for more)
         % Talk about optimizer we used (see code)
