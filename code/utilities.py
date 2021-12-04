@@ -8,12 +8,13 @@ import torch
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from transformers import AutoModelForSequenceClassification
 from transformers.data.processors.utils import InputFeatures
+from transformers import Trainer
 
 from arabert.preprocess import ArabertPreprocessor
 
-def get_SMADC_folder_data(path_to_code_folder=""):
+def get_SMADC_folder_data(code_folder_path=""):
     """Returns a dataframe with Text and Region columns."""
-    files = glob(join(path_to_code_folder, "data/SMADC/*.txt"))
+    files = glob(join(code_folder_path, "data/SMADC/*.txt"))
     dataframes = []
 
     for file in files:
@@ -24,12 +25,12 @@ def get_SMADC_folder_data(path_to_code_folder=""):
     
     return pd.concat(dataframes)
 
-def get_music_df(path_to_code_folder=""):
+def get_music_df(code_folder_path=""):
     files = ["GLF","LEV","NOR","IRQ"]
     dataframes = []
     
     for file in files:
-        temp_df = pd.read_csv(join(path_to_code_folder, f"data/extra_data/d7_data/{file}.txt"), encoding="utf8", delimiter="\n", names=["Text"])
+        temp_df = pd.read_csv(join(code_folder_path, f"data/extra_data/d7_data/{file}.txt"), encoding="utf8", delimiter="\n", names=["Text"])
         temp_df["Region"] = file
         dataframes.append(temp_df)
     
@@ -48,19 +49,19 @@ def tokenize(tokenizer, batch, sequence_length):
         return_token_type_ids=False,
     )
 
-def batch_tokenize_iter(data, batch_size):
-    len_data = len(data)
-    batch_num = len_data // batch_size
-    batch_rest = len_data / batch_size - batch_num
+def batch_tokenize_iter(tokenizer, batch, batch_size, sequence_length):
+    len_batch = len(batch)
+    batch_num = len_batch // batch_size
+    batch_rest = len_batch / batch_size - batch_num
     
     for i in range(batch_size):
-        yield tokenize(data[i * batch_num:(i+1) * batch_num].to_list())
+        yield tokenize(tokenizer, batch[i * batch_num:(i+1) * batch_num].to_list(), sequence_length)
         
     if batch_rest:
-        yield tokenize(data[batch_num:].to_list())
+        yield tokenize(tokenizer, batch[batch_num:].to_list(), sequence_length)
 
-def batch_tokenize(data, batch_size):
-    bt = batch_tokenize_iter(data, batch_size)
+def batch_tokenize(tokenizer, batch, batch_size, sequence_length):
+    bt = batch_tokenize_iter(tokenizer, batch, batch_size, sequence_length)
     for i, tokenization in enumerate(bt):
         if not i:
             encoding = tokenization
@@ -69,9 +70,9 @@ def batch_tokenize(data, batch_size):
         encoding["attention_mask"] = torch.cat([encoding["attention_mask"], tokenization["attention_mask"]])
     return encoding
 
-def preprocess_sample(sample):
+def preprocess_sample(tokenizer, sample, sequence_length):
     """Sample list of strings"""
-    return tokenize(list(arabert_prep.preprocess(text) for text in sample))
+    return tokenize(tokenizer, list(arabert_prep.preprocess(text) for text in sample), sequence_length)
 
 def save_preprocessed_data(dataset, dataset_name):
     with open(f"preprocessed_data/{dataset_name}.pkl", "wb") as file:
@@ -100,6 +101,23 @@ def compute_metrics(p):
       'accuracy': acc
     }
 
+def predict_dialect(model_path, dialect_text, tokenizer, preprocessing_function, sequence_length):
+    id2label = {0 : "EGY", 1 : "GLF", 2 : "IRQ", 3 : "LEV", 4 : "NOR"}
+     
+    df = pd.DataFrame({"Text" : [dialect_text]})
+    df["Text"] = df["Text"].apply(preprocessing_function)
+    df_encoding = tokenize(tokenizer, df["Text"].to_list(), sequence_length)
+    
+    prediction_input = Dialect_dataset(df_encoding, [1])
+
+    model = AutoModelForSequenceClassification.from_pretrained(model_path)
+    trainer = Trainer(model=model)
+    
+    prediction = trainer.predict(prediction_input)
+    label_id = np.argmax(prediction[0])
+    
+    return id2label[label_id]
+
 # Dataset class
 class Dialect_dataset(torch.utils.data.Dataset):
     def __init__(self, X, Y):
@@ -112,3 +130,4 @@ class Dialect_dataset(torch.utils.data.Dataset):
         
     def __len__(self):
         return len(self.X["input_ids"])
+
