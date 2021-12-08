@@ -263,6 +263,47 @@ We intend to build a machine learning powered classifier that distinguishes betw
 
         There are many models used today that are built on the transformer architecture especially in NLP, for example, \emph{Bidirectional Encoder Representations from Transformers} (BERT) is a popular transformer-based model. Also, OpenAI's \emph{Generative Pre-trained Transformer} (GPT) models are transformer models that garnered wide attention for being excellent in imitating human produced text.
         
+        \subsubsection{BERT}
+            
+        After the release of the transformer model in 2018 Google research released the Bidirectional Encoder Representations from Transformers, \emph{BERT}. Leveraging the attention mechanism and the parallel encoder part of transformers, BERT tries to model a sequence bidirectionally, i.e. the output of the model doesn't need to be after the end of the sequence. This property allows us to model many kinds of problems, one of which is text classification.\cite{BERT}
+            
+            \subsubsubsection{Different ways to use BERT}
+            Since BERT outputs a vector for each input token, we can append a special token \emph{CLS} at the beginning of the input sequence that represents classification, then we can use the output from that token to perform classification from and fine-tune BERT to optimize against our classification loss. 
+            
+            BERT is usually trained by predicting a masked 20\% of the input tokens that we transform to a \emph{MASK} special token, this is called \emph{Masked Language Modeling} (MLM), doing this requires BERT to consider the left and right tokens in its prediction.
+            BERT has also been used in different ways, giving it two sentences separated by a special \emph{SEP} token and optimizing against weather those two sentences are related or not, this naturally makes BERT a great fit for many problems such as text summarization, question answering as well as generating contextual embeddings.\cite{BERT}
+            
+            % \begin{figure}[h]
+            %     % \hskip-3.3cm
+            %     \centering
+            %     \includegraphics[scale=0.8]{Figures/arabert_example.PNG}
+            %%     \caption{Different ways to use BERT.\cite{BERT}}
+            %     \label{fig:cmp}
+            % \end{figure}
+            
+            
+            \begin{figure}[h]
+                \includegraphics[scale=0.52]{Figures/BERT_uses.png}
+                \caption{Different ways to use BERT.\cite{BERT}}
+                \label{fig:different_ways_to_use_BERT}
+            \end{figure}
+            
+            
+            
+            \subsubsubsection{Contextual Embeddings}
+            % Computers can't understand normal text because it can only see it as a bunch of binary numbers and because of that it can't understand the meanings of words, so the solution to that is embeddings, embeddings works by assigning a unique vector of numbers to a specific word,  ideally an embedding captures some of the semantics of the text by placing semantically similar text close together in the embedding space, this works by finding what other words it often appears next to, so for example after finding the embeddings list or dictionary and you want to know what is the most similar words to \RL{العربية} you would have to calculate it's vector and other vectors distance in the list to measures the similarity and relationship between them.
+            % Sorry, I shouldn't have let you write this. It isnt needed
+            
+            One problem traditional embeddings face is that it doesn't capture the contextual semantic information the word represents, for example \RL{ذهبنا الى البر ثم اكلنا خبز البر} here we used the word \RL{البر} in two contexts, traditional embeddings will represent those two words as the with the same vector, embeddings aware of the context they're in are known as contextual embeddings.
+            
+            
+            The first architecture that implements this sort of idea is Embeddings from Language Models (\emph{ELMo}), which does this by taking the hidden layers of words that come before and after the word we want the embeddings for, then multiplying this the hidden layer by a weighing vector then adding the result to the original word's embedding, this essentially represents nudging the embedding towards the context the word is in.
+            The same idea is also implemented by BERT.
+            
+            % The difference between normal embeddings and contextual embeddings is that the word embeddings capture word semantics in context such that it can represent differently under different context even though it is same word, one example of that is ELMo which BERT uses it internally.
+            % Repeat of same info
+            % BERT doesnt use ELMo
+        
 
     \subsection{Dialect prediction approaches}
         One can approach the problem of dialect prediction in a number of ways, We will define and discuss some different dialect recognition approaches that differ in how they work.
@@ -406,24 +447,32 @@ The discussed problem in this research has been tackled by many researchers over
                 \subsubsection{Collection}
                 SMADC's corpus is collected from three different sources, Facebook, Twitter and online newspapers. We'll briefly go over the details of collection for each source. 
                 
-                For Twitter documents, the researchers collected 210,915 tweets, then proceeded to label tweets based on the existence of pre-defined seed words and the location of the tweet's sender as well as the Geo-location of the tweet. For Facebook documents, the researches scraped 2,888,788 comments from 422,070 Facebook posts. They annotated the comments based on the country of the account the post was from. For online newspapers, the researchers collected 10,096 comments from 25 newspapers and were automatically labeled based on the newspaper's origin country.\cite{alshutayri}
-                
-                Though this simple annotation was manually checked and corrected if it were to be false, we'll discuss more of that in section \ref{txt:annotation}.
+                For Twitter documents, the researchers collected 266,289 tweets, then proceeded to label tweets based on the existence of pre-defined seed words and the location of the tweet's sender as well as the Geo-location of the tweet. For Facebook documents, the researches scraped 2,888,788 comments from 422,070 Facebook posts. They annotated the comments based on the country of the account the post was from. For online newspapers, the researchers collected 10,096 comments from 25 newspapers and were automatically labeled based on the newspaper's origin country\cite{alshutayri}.
                 
                 \subsubsection{Filteration}
-                The researchers filtered Facebook and Twitter documents automatically by removing hashtags, emojies, redundant characters and so on. They also found some difficulties making sure that their dataset is polished. They started filtering the noises of their dataset, to assure that it will improve the accuracy. Notable noises such as writing a nationality that conflicts with the label, non-Arabic characters, spelling mistakes, etc.\cite{alshutayri}
+                The researchers filtered Facebook and Twitter documents automatically by removing hashtags, emojies, redundant characters and so on. They also found some difficulties making sure that their dataset is polished. They started filtering the noises of their dataset, to assure that it will improve the accuracy. Notable noises such as writing a nationality that conflicts with the label, non-Arabic characters, etc.\cite{alshutayri}
         
                 \begin{table}[h]
                      % \hskip-3.3cm
                     \centering
-                    \includegraphics[scale=0.80]{Figures/noises_table.PNG}
+                    \includegraphics[scale=0.80]{Figures/noises_table_edited.PNG}
                     \caption{Different noises that got filtered}
                     \label{tbl:noises}
                 \end{table}
                 
                 \subsubsection{Annotation} 
                 \label{txt:annotation}    
-                After automatically annotating the documents in the way we described earlier, the researcher has used novel manual annotation techniques to annotate a part of the dataset. They had created an interactive online quiz where users would log in and manually annotate a number documents. Control documents was placed to check if the user is not randomly choosing options, and annotation conflicts were resolved by choosing majority voting. Resulting in 24,060 manually annotated documents. \cite{alshutayri}
+                After automatically annotating the documents in the way we described earlier, the researcher has used novel manual annotation techniques to annotate a part of the dataset. They had created an interactive online quiz where users would log in and manually annotate a number of documents. Control documents were placed to check if the user is not randomly choosing options, and annotation conflicts were resolved by choosing majority voting. Resulting in 24,060 manually annotated documents. \cite{alshutayri}
+                
+                \subsubsection{Final version}
+                In their final records, SMADC dataset contained 1,088,578 documents. which consisted of 812,849 Facebook comments, 9,440 online newspaper comments, and 210.915 Twitter tweets\cite{alshutayri}. And each one of them are distributed in the five labels (GLF, EGY, NOR, LEV and IRQ) The highest rate of the collected data was from Facebook comments as seen in Figure 9. Later on, they added more data to the dataset based on their previous steps of filtration.
+                \begin{figure}[h]
+                    % \hskip-3.3cm
+                    \centering
+                    \includegraphics[scale=0.85]{Figures/SMADC dataset chart.PNG}
+                    \caption{SMADC dataset chart}
+                    \label{fig:cmp}
+                \end{figure}
                 
         
         % D7 Domain
@@ -447,16 +496,12 @@ The discussed problem in this research has been tackled by many researchers over
         \subsection{Preprocessing}
         We used preprocessing techniques that help in transforming the data to a represntation the model understands, like tokenization and segmentation which we will discuss in this section.
         
-            \subsubsection{Tokenization}
-            As we discussed in section \ref{txt:tokenization_section} tokenization is an essential task for NLP problems. We'll be using tokenization to clean our dataset and transform it to be ready for classification.
-            
-            While tokenizing our dataset we'll filter any non-Arabic tokens that hasn't been already filtered, such as text from other languages, emojies and other symbols. We also will remove and Arabic diacritics such as fatha, damma, kasra and so on. so the following word \RL{مُذَكِّراتِهِ} 
+            \subsubsection{Normalization \& segmentation}
+            Before tokenizing our dataset we will normalize Arabic diacritics such as fatha, damma, kasra and so on. So the following word \RL{مُذَكِّراتِهِ} 
             will be transformed to \RL{مذكراته}, this should help the model group similar words, albeit lost a bit of accuracy.
             
-            \subsubsection{Segmentation}
-            Word segmentation is a preprocessing step for many NLP tasks, especially when dealing with rich languages like Arabic.
             
-            Arabic word segmentation works by separating the suffixes and prefixes attached to any given word, a simple example can be seen with the word \RL{العربية} which can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stemmed word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model. Another more sophisticated example is shown in Figure \ref{fig:arabic_segmentation}
+            Word segmentation is a preprocessing step for many NLP tasks, especially when dealing with rich languages like Arabic. Arabic word segmentation works by separating the suffixes and prefixes attached to any given word, a simple example can be seen with the word \RL{العربية} which can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stemmed word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model. Another more sophisticated example is shown in Figure \ref{fig:arabic_segmentation}
             
             \begin{figure}[h]
                 \includegraphics[scale=1]{Figures/arabic_segmentation.png}
@@ -466,77 +511,27 @@ The discussed problem in this research has been tackled by many researchers over
             
             % The researchers didn't have to make a segmentation function because we made use of the segmentation function that is internally integrated in AraBERT which uses Farasa segmenter\cite{Farasa}.
             % Lets mention this in the implementation, actually
-        
-        % Hawzen Domain
-        \subsection{BERT}
-            \subsubsection{BERT overview}
-            After the release of the transformer model that we talked about in section \ref{txt:transformers_section} in 2018 Google research released the Bidirectional Encoder Representations from Transformers, \emph{BERT}. Leveraging the attention mechanism and the parallel encoder part of transformers, BERT tries to model a sequence bidirectionally, i.e. the output of the model doesn't need to be after the end of the sequence. This property allows us to model many kinds of problems, one of which is text classification, which we'll talk about.\cite{BERT}
             
-            \subsubsection{Different ways to use BERT}
-            Since BERT outputs a vector for each input token, we can append a special token \emph{CLS} at the beginning of the input sequence that represents classification, then we can use the output from that token to perform classification from and fine-tune BERT to optimize against our classification loss. 
+            \subsubsection{Tokenization}
+            As we discussed in section \ref{txt:tokenization_section} tokenization is an essential task for NLP problems. We'll be using tokenization to transform our dataset to be ready for model input. After applying normalization and segmentation on the data, we transform each token to a number, so if one token is repeated more than once then that token is transformed to the same number. This allows the model to understand the input.
             
-            BERT is usually trained by predicting a masked 20\% of the input tokens that we transform to a \emph{MASK} special token, this is called \emph{Masked Language Modeling} (MLM), doing this requires BERT to consider the left and right tokens in its prediction.
-            BERT has also been used in different ways, giving it two sentences separated by a special \emph{SEP} token and optimizing against weather those two sentences are related or not, this naturally makes BERT a great fit for many problems such as text summarization, question answering as well as generating contextual embeddings.\cite{BERT}
-            
-            % \begin{figure}[h]
-            %     % \hskip-3.3cm
-            %     \centering
-            %     \includegraphics[scale=0.8]{Figures/arabert_example.PNG}
-            %%     \caption{Different ways to use BERT.\cite{BERT}}
-            %     \label{fig:cmp}
-            % \end{figure}
-            
-            
-            \begin{figure}[h]
-                \includegraphics[scale=0.52]{Figures/BERT_uses.png}
-                \caption{Different ways to use BERT.\cite{BERT}}
-                \label{fig:different_ways_to_use_BERT}
-            \end{figure}
-            
-            
-            
-            \subsubsection{Contextual Embeddings}
-            % Computers can't understand normal text because it can only see it as a bunch of binary numbers and because of that it can't understand the meanings of words, so the solution to that is embeddings, embeddings works by assigning a unique vector of numbers to a specific word,  ideally an embedding captures some of the semantics of the text by placing semantically similar text close together in the embedding space, this works by finding what other words it often appears next to, so for example after finding the embeddings list or dictionary and you want to know what is the most similar words to \RL{العربية} you would have to calculate it's vector and other vectors distance in the list to measures the similarity and relationship between them.
-            % Sorry, I shouldn't have let you write this. It isnt needed
-            
-            One problem traditional embeddings face is that it doesn't capture the contextual semantic information the word represents, for example \RL{ذهبنا الى البر ثم اكلنا خبز البر} here we used the word \RL{البر} in two contexts, traditional embeddings will represent those two words as the with the same vector, embeddings aware of the context they're in are known as contextual embeddings.
-            
-            
-            The first architecture that implements this sort of idea is Embeddings from Language Models (\emph{ELMo}), which does this by taking the hidden layers of words that come before and after the word we want the embeddings for, then multiplying this the hidden layer by a weighing vector then adding the result to the original word's embedding, this essentially represents nudging the embedding towards the context the word is in.
-            The same idea is also implemented by BERT.
-            
-            % The difference between normal embeddings and contextual embeddings is that the word embeddings capture word semantics in context such that it can represent differently under different context even though it is same word, one example of that is ELMo which BERT uses it internally.
-            % Repeat of same info
-            % BERT doesnt use ELMo
-        
+        \subsection{Using BERT}
+        For the purposes of this research, we'll use an existing implementation of BERT to solve our problem. We'll be using an Arabic BERT model called \emph{AraBERT} and fine-tuning it to the problem we need to solve.\cite{wissam}
+        In order to use AraBERT, we need to provide a sequence of tokens represented as numbers, after tokenizing our data we'll replace each token with a number representation, this forms a suitable input for AraBERT.
             
     
     \section{Experimental design}
-    % Experimental design: includes all variables in experiment
-    % Add brief two line intro if you think its needed
-    
-        \subsection{Datasets}
-        In their final records, SMADC dataset contained 1,088,578 documents. which consisted of 812,849 Facebook comments, 9,440 online newspaper comments, and 266,289 Twitter tweets\cite{alshutayri}. And each one of them are distributed in the five labels (GLF, EGY, NOR, LEV and IRQ) The highest rate of the collected data was from Facebook comments as seen in Figure 9. Later on, they added more data to the dataset based on their previous steps of filtration.
-        \begin{figure}[h]
-            % \hskip-3.3cm
-            \centering
-            \includegraphics[scale=0.85]{Figures/SMADC dataset chart.PNG}
-            \caption{SMADC dataset chart}
-            \label{fig:cmp}
-        \end{figure}
-        
-        % Overview of what does the SMADC dataset contain (numbers on how many records, their distribution (you can add a bar graph too))
-        % Anything more you want to add
-        
+        Since the dataset contains more than a million records, we'll experiment with a smaller \emph{test-train split} which should reserve most records to be trained on, and small portion to be tested on. We also observe that there's a huge label imbalance in EGY and NOR labels as they dominate the dataset in comparison to IRQ and LEV labels.
+
         \subsection{Algorithms}
-        After the success of BERT and the growing development of machine learning models and state-of-art techniques, it has become important to implement a BERT model that understands the Arabic language. Wissam Antoun and others developed \emph{AraBERT}, they pre-trained BERT to be strongly focused on Arabic language and they managed to fulfill state-of-the-art performance by testing it on most Arabic NLP tasks. They covered 1.5 billion words from different medias and articles from diverse Arab countries.\cite{wissam}
-        For the purposes of this research, we'll use their implementation of BERT.
-        % In their pre-training they used the \emph{Masked Language Modeling} (MLM), which it requires to understand the left and right context without any labeled data by just using a raw text.  Small percentage of input tokens are selected for replacement. Those tokens are replaced 80\% with the [MASK] token, and 20\% either a random token or the original token\cite{wissam}.
+        % After the success of BERT and the growing development of machine learning models and state-of-art techniques, it has become important to implement a BERT model that understands the Arabic language. Wissam Antoun and others developed \emph{AraBERT}, they pre-trained BERT to be strongly focused on Arabic language and they managed to fulfill state-of-the-art performance by testing it on most Arabic NLP tasks. They covered 1.5 billion words from different medias and articles from diverse Arab countries.\cite{wissam}
         
+        % In their pre-training they used the \emph{Masked Language Modeling} (MLM), which it requires to understand the left and right context without any labeled data by just using a raw text.  Small percentage of input tokens are selected for replacement. Those tokens are replaced 80\% with the [MASK] token, and 20\% either a random token or the original token\cite{wissam}.
+        We'll experiment with a number of hyperparameters than impact the performance of our model, here we detail some of them. We will be using the Adam optimizer and experimenting with the adam epsilon as well as the learning rate. We'll also experiment with the batch size and number of epochs. We're aiming for a general model that does not overfit.
         
         We've also introduced a warmup ratio which should accelerate our model to achieving optimality. The main idea is to use a variable learning rate increases linearly from a set minimum to a maximum then linearly decreases over the remaining number of steps. This will help us to decrease the amount of training hours and save our resources.
-        
-        
+
+\newpage
 \bibliographystyle{plain} % We choose the &quot;plain&quot; reference style
 \bibliography{cite.bib} % Entries are in the &quot;refs.bib&quot; file</code></pre>
 
