@@ -334,7 +334,11 @@ We intend to build a machine learning powered classifier that distinguishes betw
     
     \[Recall = TP / (TP + FN)\]
     
-    We can tweak the model's threshold of classification in order to achieve a different Precision and Recall metrics
+    We can tweak the model's threshold of classification in order to achieve a different Precision and Recall metrics. We also define the \emph{Accuracy} and \emph{F1-Score} in this way:
+    
+    \[Accuracy = (TP+TN) / (TP + TN + FP + FN)\]
+    
+    \[Recall = 2 * Precision * Recall / (Precision + Recall)\]
 
 
 \section{Literature review}
@@ -447,7 +451,7 @@ The discussed problem in this research has been tackled by many researchers over
                 \subsubsection{Collection}
                 SMADC's corpus is collected from three different sources, Facebook, Twitter and online newspapers. We'll briefly go over the details of collection for each source. 
                 
-                For Twitter documents, the researchers collected 266,289 tweets, then proceeded to label tweets based on the existence of pre-defined seed words and the location of the tweet's sender as well as the Geo-location of the tweet. For Facebook documents, the researches scraped 2,888,788 comments from 422,070 Facebook posts. They annotated the comments based on the country of the account the post was from. For online newspapers, the researchers collected 10,096 comments from 25 newspapers and were automatically labeled based on the newspaper's origin country\cite{alshutayri}.
+                For Twitter documents, the researchers collected 323,236 tweets, then proceeded to label tweets based on the existence of pre-defined seed words and the location of the tweet's sender as well as the Geo-location of the tweet. For Facebook documents, the researches scraped 2,888,788 comments from 422,070 Facebook posts. They annotated the comments based on the country of the account the post was from. For online newspapers, the researchers collected 10,096 comments from 25 newspapers and were automatically labeled based on the newspaper's origin country\cite{alshutayri}.
                 
                 \subsubsection{Filteration}
                 The researchers filtered Facebook and Twitter documents automatically by removing hashtags, emojies, redundant characters and so on. They also found some difficulties making sure that their dataset is polished. They started filtering the noises of their dataset, to assure that it will improve the accuracy. Notable noises such as writing a nationality that conflicts with the label, non-Arabic characters, etc.\cite{alshutayri}
@@ -465,7 +469,7 @@ The discussed problem in this research has been tackled by many researchers over
                 After automatically annotating the documents in the way we described earlier, the researcher has used novel manual annotation techniques to annotate a part of the dataset. They had created an interactive online quiz where users would log in and manually annotate a number of documents. Control documents were placed to check if the user is not randomly choosing options, and annotation conflicts were resolved by choosing majority voting. Resulting in 24,060 manually annotated documents. \cite{alshutayri}
                 
                 \subsubsection{Final version}
-                In their final records, SMADC dataset contained 1,088,578 documents. which consisted of 812,849 Facebook comments, 9,440 online newspaper comments, and 210.915 Twitter tweets\cite{alshutayri}. And each one of them are distributed in the five labels (GLF, EGY, NOR, LEV and IRQ) The highest rate of the collected data was from Facebook comments as seen in Figure 9. Later on, they added more data to the dataset based on their previous steps of filtration.
+                In their final records, SMADC dataset contained 1,088,578 documents. which consisted of 812,849 Facebook comments, 9,440 online newspaper comments, and 266,289 Twitter tweets\cite{alshutayri}. And each one of them are distributed in the five labels (GLF, EGY, NOR, LEV and IRQ) The highest rate of the collected data was from Facebook comments as seen in Figure 9. Later on, they added more data to the dataset based on their previous steps of filtration.
                 \begin{figure}[h]
                     % \hskip-3.3cm
                     \centering
@@ -521,15 +525,17 @@ The discussed problem in this research has been tackled by many researchers over
             
     
     \section{Experimental design}
-        Since the dataset contains more than a million records, we'll experiment with a smaller \emph{test-train split} which should reserve most records to be trained on, and small portion to be tested on. We also observe that there's a huge label imbalance in EGY and NOR labels as they dominate the dataset in comparison to IRQ and LEV labels.
+        Since the dataset contains more than a million records, we'll experiment with a smaller \emph{test-train split} which should reserve most records to be trained on, and small portion to be tested on. We intend to output the model results as a probability distribution over the labels EGY, GLF, NOR, IRQ, and LEV. We also intend to quantify the model's performance using \emph{Accuracy} and \emph{F1-Score}.
 
         \subsection{Algorithms}
         % After the success of BERT and the growing development of machine learning models and state-of-art techniques, it has become important to implement a BERT model that understands the Arabic language. Wissam Antoun and others developed \emph{AraBERT}, they pre-trained BERT to be strongly focused on Arabic language and they managed to fulfill state-of-the-art performance by testing it on most Arabic NLP tasks. They covered 1.5 billion words from different medias and articles from diverse Arab countries.\cite{wissam}
         
         % In their pre-training they used the \emph{Masked Language Modeling} (MLM), which it requires to understand the left and right context without any labeled data by just using a raw text.  Small percentage of input tokens are selected for replacement. Those tokens are replaced 80\% with the [MASK] token, and 20\% either a random token or the original token\cite{wissam}.
-        We'll experiment with a number of hyperparameters than impact the performance of our model, here we detail some of them. We will be using the Adam optimizer and experimenting with the adam epsilon as well as the learning rate. We'll also experiment with the batch size and number of epochs. We're aiming for a general model that does not overfit.
+        We observe that there's a huge label imbalance in EGY and NOR labels as they dominate the dataset in comparison to IRQ and LEV labels, we intend to mitigate such imbalances by experimenting with imbalance correction techniques such as \emph{SMOT} if needed.
         
-        We've also introduced a warmup ratio which should accelerate our model to achieving optimality. The main idea is to use a variable learning rate increases linearly from a set minimum to a maximum then linearly decreases over the remaining number of steps. This will help us to decrease the amount of training hours and save our resources.
+        We'll experiment with a number of hyperparameters that impact the performance of our model, here we detail some of them. We will be using the Adam optimizer and experimenting with the adam epsilon as well as the learning rate. We'll also experiment with the batch size and number of epochs. We're aiming for a general model that does not overfit.
+        
+        We've also introduced a warmup ratio which should accelerate our model to achieving optimality. The main idea is to use a variable learning rate that increases linearly from a set minimum to a maximum then linearly decreases over the remaining number of steps. This will help us to decrease the amount of training hours and save our resources.
 
 \newpage
 \bibliographystyle{plain} % We choose the &quot;plain&quot; reference style
