@@ -8,7 +8,7 @@ import torch
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from transformers import AutoModelForSequenceClassification
 from transformers.data.processors.utils import InputFeatures
-from transformers import Trainer
+from transformers import Trainer, TrainingArguments
 
 from arabert.preprocess import ArabertPreprocessor
 
@@ -24,6 +24,20 @@ def get_SMADC_folder_data(code_folder_path=""):
         dataframes.append(temp_df)
     
     return pd.concat(dataframes)
+
+def get_annotated_data_folder_data(code_folder_path=""):
+    """Returns a dataframe with Text and Region columns."""
+    regions = ["egyptian", "gulf", "iraqi", "levantine", "maghrebi"]
+    labels = ["EGY", "GLF", "IRQ", "LEV", "NOR"]
+    region_to_label = {region:label for region, label in zip(regions, labels)}
+    files = [join(code_folder_path, "data", "annotated_data", region) for region in regions]
+    
+    dfs = [pd.read_csv(file, encoding="utf8", sep="\t", names=["Region", "Text"])[2:] 
+        for file in files]
+    
+    dfs = pd.concat(dfs)
+    dfs["Region"] = dfs["Region"].apply(region_to_label.get)
+    return dfs
 
 def get_music_df(code_folder_path=""):
     files = ["GLF","LEV","NOR","IRQ"]
@@ -70,7 +84,7 @@ def batch_tokenize(tokenizer, batch, batch_size, sequence_length):
         encoding["attention_mask"] = torch.cat([encoding["attention_mask"], tokenization["attention_mask"]])
     return encoding
 
-def preprocess_sample(tokenizer, sample, sequence_length):
+def preprocess_sample(tokenizer, sample, sequence_length, arabert_prep):
     """Sample list of strings"""
     return tokenize(tokenizer, list(arabert_prep.preprocess(text) for text in sample), sequence_length)
 
@@ -85,6 +99,51 @@ def load_preprocessed_data(dataset_name):
 
 def model_init(model_name, num_labels, label2id, id2label):
     return AutoModelForSequenceClassification.from_pretrained(model_name, return_dict=True, num_labels=num_labels, label2id=label2id, id2label=id2label)
+
+def generate_training_args(output_dir, epochs=5, do_warmup=True, warmup_ratio=0.05, save_model=True, 
+        eval_while_training=True, learning_rate=1e-5, batch_size=32, train_dataset_length=0, seed=42):
+    training_args = TrainingArguments(output_dir)
+
+    training_args.adam_epsilon = 1e-8
+    training_args.learning_rate = learning_rate
+
+    training_args.fp16 = True
+
+    training_args.per_device_train_batch_size = batch_size
+    training_args.per_device_eval_batch_size = batch_size
+
+    training_args.gradient_accumulation_steps = 1
+    
+    if epochs:
+        training_args.num_train_epochs = epochs
+
+    if do_warmup:
+        if not train_dataset_length:
+            print("WARNING do_warmup is TRUE but train_dataset_length == 0. Set train_dataset_length")
+        steps_per_epoch = train_dataset_length // (training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps)
+        total_steps = steps_per_epoch * training_args.num_train_epochs
+        training_args.warmup_steps = total_steps * warmup_ratio 
+    
+    training_args.logging_steps = 10 ** 4
+    
+    if eval_while_training:
+        training_args.evaluation_strategy = "steps"
+        training_args.evaluate_during_training = True
+        training_args.load_best_model_at_end = True
+        training_args.eval_steps = 10 ** 4 # defaults to logging_steps
+        training_args.metric_for_best_model = "macro_f1"
+    
+    if save_model:
+        training_args.save_steps = 10 ** 4
+        training_args.save_total_limit = 120
+        training_args.save_strategy = "steps"
+
+    training_args.seed = seed
+
+    # training_args.lr_scheduler_type = 'cosine'
+
+
+    return training_args
 
 def compute_metrics(p): 
     preds = np.argmax(p.predictions, axis=1)
