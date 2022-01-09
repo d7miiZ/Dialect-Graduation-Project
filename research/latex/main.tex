@@ -271,7 +271,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
             Since BERT outputs a vector for each input token, we can append a special token \emph{CLS} at the beginning of the input sequence that represents classification, then we can use the output from that token to perform classification from and fine-tune BERT to optimize against our classification loss. 
             
             BERT is usually trained by predicting a masked 20\% of the input tokens that we transform to a \emph{MASK} special token, this is called \emph{Masked Language Modeling} (MLM), doing this requires BERT to consider the left and right tokens in its prediction.
-            BERT has also been used in different ways, giving it two sentences separated by a special \emph{SEP} token and optimizing against weather those two sentences are related or not, this naturally makes BERT a great fit for many problems such as text summarization, question answering as well as generating contextual embeddings.\cite{BERT}
+            BERT has also been used in different ways, giving it two sentences separated by a special \emph{SEP} token and optimizing against whether those two sentences are related or not, this naturally makes BERT a great fit for many problems such as text summarization, question answering as well as generating contextual embeddings.\cite{BERT}
             
             % \begin{figure}[h]
             %     % \hskip-3.3cm
@@ -338,7 +338,7 @@ We intend to build a machine learning powered classifier that distinguishes betw
     
     \[Accuracy = (TP+TN) / (TP + TN + FP + FN)\]
     
-    \[Recall = 2 * Precision * Recall / (Precision + Recall)\]
+    \[F1-Score = 2 * Precision * Recall / (Precision + Recall)\]
 
 
 \section{Literature review}
@@ -443,6 +443,12 @@ The discussed problem in this research has been tackled by many researchers over
     
     \section{Methodology}
         % big graph, detailed and has example input and example output (use something like drawio)
+        \begin{figure}[h]
+            \hskip-1.3cm
+            \includegraphics[scale=0.6]{Figures/inference_figure.png}
+            \caption{High-level view of inference procedure of a single input sentence}
+            \label{fig:inference_figure}
+        \end{figure}
         
         % Hawzen Domain
             \subsection{The SMADC dataset}
@@ -457,7 +463,7 @@ The discussed problem in this research has been tackled by many researchers over
                 The researchers filtered Facebook and Twitter documents automatically by removing hashtags, emojies, redundant characters and so on. They also found some difficulties making sure that their dataset is polished. They started filtering the noises of their dataset, to assure that it will improve the accuracy. Notable noises such as writing a nationality that conflicts with the label, non-Arabic characters, etc.\cite{alshutayri}
         
                 \begin{table}[h]
-                     % \hskip-3.3cm
+                    %   \hskip-3.3cm
                     \centering
                     \includegraphics[scale=0.80]{Figures/noises_table_edited.PNG}
                     \caption{Different noises that got filtered}
@@ -498,11 +504,18 @@ The discussed problem in this research has been tackled by many researchers over
             % Read first character of every word
         
         \subsection{Preprocessing}
-        We used preprocessing techniques that help in transforming the data to a represntation the model understands, like tokenization and segmentation which we will discuss in this section.
+        We used preprocessing techniques that help in transforming the data to a representation the model understands, like tokenization and segmentation which we will discuss in this section.
+        
+        \begin{figure}[h]
+            \hskip-2.3cm
+            \includegraphics[scale=0.4]{Figures/preprocessing_figure.png}
+            \caption{High-level view of preprocessing procedure of a single input sentence}
+            \label{fig:inference_figure}
+        \end{figure}
         
             \subsubsection{Normalization \& segmentation}
             Before tokenizing our dataset we will normalize Arabic diacritics such as fatha, damma, kasra and so on. So the following word \RL{مُذَكِّراتِهِ} 
-            will be transformed to \RL{مذكراته}, this should help the model group similar words, albeit lost a bit of accuracy.
+            will be transformed to \RL{مذكراته}, this should help the model group similar words, albeit lose a bit of accuracy.
             
             
             Word segmentation is a preprocessing step for many NLP tasks, especially when dealing with rich languages like Arabic. Arabic word segmentation works by separating the suffixes and prefixes attached to any given word, a simple example can be seen with the word \RL{العربية} which can be segmented to \RL{ال + عربي + ة}, in this example we can see that the prefix in this word is \RL{ال} and the suffix is \RL{ة} and the stemmed word is \RL{عربي}, segmentation has shown to have signiﬁcant impact in many NLP application such as context understanding, because it gives more information to the model. Another more sophisticated example is shown in Figure \ref{fig:arabic_segmentation}
@@ -525,13 +538,13 @@ The discussed problem in this research has been tackled by many researchers over
             
     
     \section{Experimental design}
-        Since the dataset contains more than a million records, we'll experiment with a smaller \emph{test-train split} which should reserve most records to be trained on, and small portion to be tested on. We intend to output the model results as a probability distribution over the labels EGY, GLF, NOR, IRQ, and LEV. We also intend to quantify the model's performance using \emph{Accuracy} and \emph{F1-Score}.
+        Since the dataset contains more than a million records, we'll experiment with a smaller \emph{test-train split} which should reserve most records to be trained on, and a small portion to be tested on. We intend to output the model results as a probability distribution over the labels EGY, GLF, NOR, IRQ, and LEV. We also intend to quantify the model's performance using \emph{Accuracy} and \emph{F1-Score}.
 
         \subsection{Algorithms}
         % After the success of BERT and the growing development of machine learning models and state-of-art techniques, it has become important to implement a BERT model that understands the Arabic language. Wissam Antoun and others developed \emph{AraBERT}, they pre-trained BERT to be strongly focused on Arabic language and they managed to fulfill state-of-the-art performance by testing it on most Arabic NLP tasks. They covered 1.5 billion words from different medias and articles from diverse Arab countries.\cite{wissam}
         
         % In their pre-training they used the \emph{Masked Language Modeling} (MLM), which it requires to understand the left and right context without any labeled data by just using a raw text.  Small percentage of input tokens are selected for replacement. Those tokens are replaced 80\% with the [MASK] token, and 20\% either a random token or the original token\cite{wissam}.
-        We observe that there's a huge label imbalance in EGY and NOR labels as they dominate the dataset in comparison to IRQ and LEV labels, we intend to mitigate such imbalances by experimenting with imbalance correction techniques such as \emph{SMOT} if needed.
+        We observe that there's a huge label imbalance in EGY and NOR labels as they dominate the dataset in comparison to IRQ and LEV labels, we intend to mitigate such imbalances by experimenting with imbalance correction techniques such as \emph{SMOTE} if needed.
         
         We'll experiment with a number of hyperparameters that impact the performance of our model, here we detail some of them. We will be using the Adam optimizer and experimenting with the adam epsilon as well as the learning rate. We'll also experiment with the batch size and number of epochs. We're aiming for a general model that does not overfit.
         
