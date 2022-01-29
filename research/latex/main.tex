@@ -549,6 +549,93 @@ The discussed problem in this research has been tackled by many researchers over
         We'll experiment with a number of hyperparameters that impact the performance of our model, here we detail some of them. We will be using the Adam optimizer and experimenting with the adam epsilon as well as the learning rate. We'll also experiment with the batch size and number of epochs. We're aiming for a general model that does not overfit.
         
         We've also introduced a warmup ratio which should accelerate our model to achieving optimality. The main idea is to use a variable learning rate that increases linearly from a set minimum to a maximum then linearly decreases over the remaining number of steps. This will help us to decrease the amount of training hours and save our resources.
+        
+    \section{Implementation }
+    
+    \subsection{Setting up and initialize AraBERT model}
+    \subsection{Preprocessing}
+    The preprocessing pipeline that the researchers took is first normalize and segment the raw text after that we use tokenizer so that each token is transformed unique number (same tokens transform to the same number) after finishing the preprocessing pipeline now we can feed AraBERT the inputs.
+        \subsubsection{AraBERT preprocessor and farasapy}
+        Each AraBERT  model has it's own preprocessor that it's trained on, also each preprocessor uses internally Farasa Segmenter from the Farasa package, in this research we will use the bert-large-arabertv2 model preprocessor, Here's how the researchers implemented the preprocessor in python:
+        \begin{lstlisting}[language=Python]
+        from arabert.preprocess import ArabertPreprocessor
+        
+        model_name = "aubmindlab/bert-large-arabertv2"
+        arabert_prep = ArabertPreprocessor(model_name)
+        
+        df["Text"] = df["Text"].apply(arabert_prep.preprocess)
+        \end{lstlisting}
+        this whole code takes about 16 minute and 22 second.
+        \subsubsection{AraBERT tokenizer}
+        The tokenizer goal is to transform raw text to unique number i.e IDs, it's objective is to find the most meaningful representation, each AraBERT model has it's own vocabulary and tokenizer that it's trained on, in this research we will use the bert-large-arabertv2 model tokenizer, Here's how the researchers implemented the tokenizer in python:
+        \begin{lstlisting}[language=Python]
+        from transformers import AutoTokenizer
+        
+        def tokenize(tokenizer, batch, sequence_length):
+        """Tokenizes a list of strings"""
+        return tokenizer.batch_encode_plus(
+            batch,
+            add_special_tokens=True,
+            padding="max_length",
+            max_length=sequence_length,
+            truncation=True,
+            return_tensors="pt",
+            return_attention_mask=True,
+            return_token_type_ids=False,
+        )
+        
+        model_name = "aubmindlab/bert-large-arabertv2"
+        sequence_length= 32
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        train_encoding = tokenize(tokenizer, list(train["Text"]), sequence_length)
+        \end{lstlisting}
+        The researchers also implemented another version that's tokenize batches of strings, to help reduce memory footprint.
+        \begin{lstlisting}[language=Python]
+       from transformers import AutoTokenizer
+        
+       def batch_tokenize_iter(tokenizer, batch, batch_size, sequence_length):
+        len_batch = len(batch)
+        batch_num = len_batch // batch_size
+        batch_rest = len_batch / batch_size - batch_num
+    
+        for i in range(batch_size):
+            yield tokenize(tokenizer, batch[i * batch_num:(i+1) * batch_num].to_list(), sequence_length)
+        
+        if batch_rest:
+            yield tokenize(tokenizer, batch[batch_num:].to_list(), sequence_length)
+
+       def batch_tokenize(tokenizer, batch, batch_size, sequence_length):
+        bt = batch_tokenize_iter(tokenizer, batch, batch_size, sequence_length)
+        for i, tokenization in enumerate(bt):
+            if not i:
+                encoding = tokenization
+                continue
+            encoding["input_ids"] = torch.cat([encoding["input_ids"], tokenization["input_ids"]])
+            encoding["attention_mask"] = torch.cat([encoding["attention_mask"], tokenization["attention_mask"]])
+        return encoding
+
+        model_name = "aubmindlab/bert-large-arabertv2"
+        sequence_length= 32
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        train_encoding =  batch_tokenize(tokenizer, train["Text"], 500, sequence_length)
+        \end{lstlisting}
+        \subsubsection{Saving and loading preprocessed data}
+        The researchers noticed an issue and that's for each run the whole preprocessing pipeline takes approximately about 16 - 20 minutes and that renders the ability to test and run as many times as we can, so the solution for that was to save the preprocessed data and bypass the whole preprocessing pipeline by loading the preprocessed data when needed, the loading takes about 3 minutes and that reduces about 70\% of previous waiting time. 
+        \begin{lstlisting}[language=Python]
+        from pickle import dump, load
+
+        def save_preprocessed_data(dataset, dataset_name):
+            with open(f"preprocessed_data/{dataset_name}.pkl", "wb") as file:
+                dump(dataset, file)
+        
+        def load_preprocessed_data(dataset_name):
+            with open(f"preprocessed_data/{dataset_name}.pkl", "rb") as file:
+                temp = load(file)
+            return temp
+        \end{lstlisting}
+    \subsection{Training AraBERT}
+    \subsection{Hyperprameter tuning}
+
 
 \newpage
 \bibliographystyle{plain} % We choose the &quot;plain&quot; reference style
