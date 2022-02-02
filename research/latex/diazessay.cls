@@ -37,6 +37,7 @@
 %----------------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
+\usepackage{listings}
 
 \usepackage[english]{babel} % English language hyphenation
 
