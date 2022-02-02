@@ -1,5 +1,7 @@
 from glob import glob
 from os.path import join
+from os import path
+import os
 from pickle import dump, load
 
 import numpy as np
@@ -38,6 +40,49 @@ def get_annotated_data_folder_data(code_folder_path=""):
     dfs = pd.concat(dfs)
     dfs["Region"] = dfs["Region"].apply(region_to_label.get)
     return dfs
+
+def get_arabic_dialects_dataset_folder_data(code_folder_path=""):
+    """Returns a dataframe with Text and Region columns."""
+    # CHECK LAV MEANS LEV? # MENTION NO IRQ
+    # Filter low quality test?
+    labels = ["EGY", "GLF", "LEV", "NOR"]
+    regions = [f"all{label if label != 'LEV' else 'LAV'}.txt" for label in labels]
+    region_to_label = {region:label for region, label in zip(regions, labels)}
+    files = [join(code_folder_path, "data", "ArabicDialectsDataset", "Dialects Full Text", region)
+                for region in regions]
+
+    dfs = []
+    for file in files:
+        norm_file_path = path.normpath(file)
+        file_name = norm_file_path.split(os.sep)[-1]
+
+        df = pd.read_csv(file, encoding="utf8", names=["Text"])
+        df["Region"] = region_to_label[file_name]
+        dfs.append(df)
+        
+    return pd.concat(dfs)
+
+def get_dart_folder_data(code_folder_path=""):
+    """Returns a dataframe with Text and Region columns."""
+    # What about dart gold? what is it
+    # Filter low quality test?
+    labels = ["EGY", "GLF", "IRQ", "LEV", "NOR"]
+    regions = [region + ".txt" for region in ["EGY", "GLF", "IRQ", "LEV", "MGH"]]
+    region_to_label = {region:label for region, label in zip(regions, labels)}
+    files = [join(code_folder_path, "data", "DART", "cf-data", region)
+                for region in regions]
+
+    dfs = []
+    for file in files:
+        norm_file_path = os.path.normpath(file)
+        file_name = norm_file_path.split(os.sep)[-1]
+
+        df = pd.read_csv(file, delimiter="\t",encoding="utf8", names=["_", "__", "Text"])
+        df["Region"] = region_to_label[file_name]
+        df = df[["Text", "Region"]].iloc[1:]
+        dfs.append(df)
+        
+    pd.concat(dfs)
 
 def get_music_df(code_folder_path=""):
     files = ["GLF","LEV","NOR","IRQ"]
