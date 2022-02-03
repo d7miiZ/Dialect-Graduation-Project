@@ -82,7 +82,7 @@ def get_dart_folder_data(code_folder_path=""):
         df = df[["Text", "Region"]].iloc[1:]
         dfs.append(df)
         
-    pd.concat(dfs)
+    return pd.concat(dfs)
 
 def get_music_df(code_folder_path=""):
     files = ["GLF","LEV","NOR","IRQ"]
@@ -184,9 +184,6 @@ def generate_training_args(output_dir, epochs=5, do_warmup=True, warmup_ratio=0.
         training_args.save_strategy = "steps"
 
     training_args.seed = seed
-
-    # training_args.lr_scheduler_type = 'cosine'
-
 
     return training_args
 
