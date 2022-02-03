@@ -552,11 +552,36 @@ The discussed problem in this research has been tackled by many researchers over
         
     \section{Implementation }
     
-    \subsection{Setting up and initialize AraBERT model}
+    \subsection{Setting up and initialization} \label{txt:models}
+    The researchers used three different AraBERT models\cite{antoun2020arabert}:
+    \begin{enumerate}
+        \item AraBERTv2-base (543MB)
+        \item AraBERTv2-large (1.38G)
+        \item AraBERTv0.2-Twitter-base (543MB)
+    \end{enumerate}
+    And downloaded them via the \emph{Hugging Face} library to fine-tune them to their specific use case.
+    
+    The researchers also downloaded and imported the SMADC dataset to use it.
+    
+    \begin{lstlisting}[language=Python, basicstyle=\footnotesize]
+    def get_SMADC_folder_data(code_folder_path=""):
+    """Returns a dataframe with Text and Region columns."""
+    files = glob(join(code_folder_path, "data/SMADC/*.txt"))
+    dataframes = []
+
+    for file in files:
+        region = file[-7:-4]
+        temp_df = pd.read_csv(file, encoding="utf8", delimiter="\n", names=["Text"])
+        temp_df["Region"] = region
+        dataframes.append(temp_df)
+    
+    return pd.concat(dataframes)
+    \end{lstlisting}
+    
     \subsection{Preprocessing}
     The preprocessing pipeline that the researchers took is first normalize and segment the raw text after that we use tokenizer so that each token is transformed unique number (same tokens transform to the same number) after finishing the preprocessing pipeline now we can feed AraBERT the inputs.
         \subsubsection{AraBERT preprocessor and farasapy}
-        Each AraBERT  model has it's own preprocessor that it's trained on, also each preprocessor uses internally Farasa Segmenter from the Farasa package, in this research we will use the bert-large-arabertv2 model preprocessor, Here's how the researchers implemented the preprocessor in python:
+        Each AraBERT  model has it's own preprocessor that it's trained on, also each preprocessor uses internally Farasa Segmenter from the Farasa package, in this example we will use the bert-large-arabertv2 model preprocessor.
         \begin{lstlisting}[language=Python]
         from arabert.preprocess import ArabertPreprocessor
         
@@ -565,10 +590,14 @@ The discussed problem in this research has been tackled by many researchers over
         
         df["Text"] = df["Text"].apply(arabert_prep.preprocess)
         \end{lstlisting}
-        this whole code takes about 16 minute and 22 second.
+        This code takes about 16 minute and 22 second to execute.
+        
         \subsubsection{AraBERT tokenizer}
-        The tokenizer goal is to transform raw text to unique number i.e IDs, it's objective is to find the most meaningful representation, each AraBERT model has it's own vocabulary and tokenizer that it's trained on, in this research we will use the bert-large-arabertv2 model tokenizer, Here's how the researchers implemented the tokenizer in python:
-        \begin{lstlisting}[language=Python]
+        The tokenizer's goal is to transform raw text to unique numbers (i.e IDs), its objective is to find the most meaningful representation, each AraBERT model has its own vocabulary and tokenizer that its trained on, in this example we will use the bert-large-arabertv2 model tokenizer.
+        \begin{lstlisting}[
+        language=Python,
+        basicstyle=\footnotesize
+        ]
         from transformers import AutoTokenizer
         
         def tokenize(tokenizer, batch, sequence_length):
@@ -589,14 +618,18 @@ The discussed problem in this research has been tackled by many researchers over
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         train_encoding = tokenize(tokenizer, list(train["Text"]), sequence_length)
         \end{lstlisting}
-        The researchers also implemented another version that's tokenize batches of strings, to help reduce memory footprint.
-        \begin{lstlisting}[language=Python]
+        The researchers also implemented another version that tokenizes batches of strings to help reduce memory footprint.
+        \begin{lstlisting}[
+        language=Python,
+        basicstyle=\footnotesize,
+        tabsize=2
+        ]
        from transformers import AutoTokenizer
         
        def batch_tokenize_iter(tokenizer, batch, batch_size, sequence_length):
-        len_batch = len(batch)
-        batch_num = len_batch // batch_size
-        batch_rest = len_batch / batch_size - batch_num
+            len_batch = len(batch)
+            batch_num = len_batch // batch_size
+            batch_rest = len_batch / batch_size - batch_num
     
         for i in range(batch_size):
             yield tokenize(tokenizer, batch[i * batch_num:(i+1) * batch_num].to_list(), sequence_length)
@@ -620,8 +653,11 @@ The discussed problem in this research has been tackled by many researchers over
         train_encoding =  batch_tokenize(tokenizer, train["Text"], 500, sequence_length)
         \end{lstlisting}
         \subsubsection{Saving and loading preprocessed data}
-        The researchers noticed an issue and that's for each run the whole preprocessing pipeline takes approximately about 16 - 20 minutes and that renders the ability to test and run as many times as we can, so the solution for that was to save the preprocessed data and bypass the whole preprocessing pipeline by loading the preprocessed data when needed, the loading takes about 3 minutes and that reduces about 70\% of previous waiting time. 
-        \begin{lstlisting}[language=Python]
+        For each run the preprocessing pipeline takes approximately 16 - 20 minutes, the researches save and load the preprocessed data to cut the preprocessing time short. The loading takes about 3 minutes which reduces about 70\% of waiting time. 
+        \begin{lstlisting}[
+        language=Python,
+        basicstyle=\footnotesize
+        ]
         from pickle import dump, load
 
         def save_preprocessed_data(dataset, dataset_name):
@@ -633,15 +669,133 @@ The discussed problem in this research has been tackled by many researchers over
                 temp = load(file)
             return temp
         \end{lstlisting}
+        
+        
     \subsection{Training AraBERT}
+    The researchers utilize the \emph{Hugging Face Trainer} utility, which allows us to fine-tune AraBERT by changing various options (optimizers, loss function, etc.) as well as run costume monitoring scripts each n-steps of training.
+    In the following code we initialize our Trainer arguments.
+    \begin{lstlisting}[
+        language=Python,
+        basicstyle=\tiny
+        ]
+        def generate_training_args(output_dir, epochs=5, do_warmup=True, warmup_ratio=0.05, save_model=True, 
+            eval_while_training=True, learning_rate=1e-5, batch_size=32, train_dataset_length=0, seed=42):
+            training_args = TrainingArguments(output_dir)
+        
+            training_args.adam_epsilon = 1e-8
+            training_args.learning_rate = learning_rate
+        
+            training_args.fp16 = True
+        
+            training_args.per_device_train_batch_size = batch_size
+            training_args.per_device_eval_batch_size = batch_size
+        
+            training_args.gradient_accumulation_steps = 1
+            
+            if epochs:
+                training_args.num_train_epochs = epochs
+        
+            if do_warmup:
+                if not train_dataset_length:
+                    print("WARNING do_warmup is TRUE but train_dataset_length == 0. Set train_dataset_length")
+                steps_per_epoch = train_dataset_length // (training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps)
+                total_steps = steps_per_epoch * training_args.num_train_epochs
+                training_args.warmup_steps = total_steps * warmup_ratio 
+            
+            training_args.logging_steps = 10 ** 4
+            
+            if eval_while_training:
+                training_args.evaluation_strategy = "steps"
+                training_args.evaluate_during_training = True
+                training_args.load_best_model_at_end = True
+                training_args.eval_steps = 10 ** 4 # defaults to logging_steps
+                training_args.metric_for_best_model = "macro_f1"
+            
+            if save_model:
+                training_args.save_steps = 10 ** 4
+                training_args.save_total_limit = 120
+                training_args.save_strategy = "steps"
+        
+            training_args.seed = seed
+        
+            return training_args
+            
+        training_args = generate_training_args(
+                    train_path, epochs=epochs, do_warmup=do_warmup, warmup_ratio=warmup_ratio, 
+                    save_model=save_model_while_training, eval_while_training=eval_while_training, 
+                    learning_rate=learning_rate,batch_size=batch_size, 
+                    train_dataset_length=len(train_dataset), seed=seed
+                    )
+    \end{lstlisting}
+    
+    Then in the following code we make our trainer and train it
+    \begin{lstlisting}[
+        language=Python,
+        basicstyle=\footnotesize
+        ]
+        trainer = Trainer(
+            pretrained_classifier,
+            args=training_args,
+            train_dataset=train_dataset,
+            eval_dataset=validate_dataset,
+            compute_metrics=compute_metrics,
+            callbacks=[EarlyStoppingCallback(early_stopping_patience=3), TensorBoardCallback()]
+        )
+        
+        trainer.train()
+    \end{lstlisting}
+    
     \subsection{Hyperprameter tuning}
     
-    \section {Experiments and Results}
-    Here we will show the results that we obtained from each model to see the best results and the difference between each model.
     
+    \section {Results}
+    After training the three models we mentioned in section \ref{txt:models} we tested them on three datasets obtained from various sources, these datasets are:
+    \begin{enumerate}
+        \item \textbf{dart}: \emph{DART: A Large Dataset of Dialectal Arabic Tweets}\cite{alsarsour-etal-2018-dart}
+        \item \textbf{annotated\_data\_folder}: \emph{The Arabic Online Commentary Dataset:
+an Annotated Dataset of Informal Arabic with High Dialectal Content}\cite{zaidan_burch}
+        \item \textbf{arabic\_dialects\_dataset}: \emph{A Multi-Dialect, Multi-Genre Corpus of Informal Written Arabic}\cite{cotterell-callison-burch-2014-multi}
+    \end{enumerate}
+    
+    
+    \vskip2.3cm
+    \hskip-4.0cm
+\begin{tabular}{llrrrr}
+\toprule
+          Model name &         Dataset &  SMADC Accuracy &  Macro F1 &  Macro precision &  Macro recall \\
+\midrule
+bert-large-arabertv2 &  annotated\_data &        0.892154 &  0.608431 &         0.597582 &      0.660434 \\
+bert-large-arabertv2 & arabic\_dialects &        0.892154 &  0.449060 &         0.459210 &      0.440770 \\
+ bert-base-arabertv2 &            dart &        0.871582 &  0.760816 &         0.766500 &      0.759033 \\
+\bottomrule
+\end{tabular}
+
+
+        
+    \vskip0.3cm
+    We also note that we trained a AraBERT Large model that did over-fit on the SMADC test set with 96\% accuracy, while AraBERT Base didn't. 
+    We also compared very many traditional models and applied the same tests on, here are the best 3 models on all datasets
+    \vskip0.3cm
+    \hskip-4.3cm
+    \begin{tabular}{lllrrr}
+    \toprule
+               Model name &         Dataset & SMADC accuracy &  Macro F1 &  Macro precision &  Macro recall \\
+    \midrule
+    MultinomialNaiveBayes &  annotated\_data &          0.865 &  0.552954 &         0.561883 &      0.611622 \\
+    MultinomialNaiveBayes & arabic\_dialects &          0.865 &  0.450884 &         0.464933 &      0.446934 \\
+    MultinomialNaiveBayes &            dart &          0.865 &  0.737389 &         0.742771 &      0.748739 \\
+             RandomForest &  annotated\_data &           0.76 &  0.462519 &         0.497453 &      0.497691 \\
+             RandomForest & arabic\_dialects &           0.76 &  0.357108 &         0.400919 &      0.357486 \\
+             RandomForest &            dart &           0.76 &  0.667313 &         0.699270 &      0.681225 \\
+               Linear SVM &  annotated\_data &          0.747 &  0.491982 &         0.524889 &      0.523377 \\
+               Linear SVM & arabic\_dialects &          0.747 &  0.373722 &         0.418487 &      0.370232 \\
+               Linear SVM &            dart &          0.747 &  0.656211 &         0.698349 &      0.667280 \\
+    \bottomrule
+    \end{tabular}
+
     
     \section {Conclusion}
-    The goal of our work was to develop a system that recognizes and classifies different Arabic dialects by using various models. Since people in social networks usually use different dialects to contact with each other and there are multiple words used in different dialects that causes a lot of misconception with each dialect. We tried to accomplish our goal by utilizing diverse NLP models. We used three models (Naïve Bayes, BERT, BERT large). Considering classifying Arabic dialects is not an easy task, there were some aspects that helped to improve the accuracy. However, we tested the models and saw the huge difference between Naïve Bayes, Both BERT and BERT large. The lowest performance is Naïve Bayes. BERT is used in our project specifically to understand the meaning of language’s text, which gives BERT and BERT large great advantage to fulfill the task with a high accuracy. Due to the complex nature of the problem, we used a portion of the data to get good results as we saw in the experiments and results. Finding the right capabilities for the model was the key for acquiring appropriate results. After we finished the implementation, we successfully achieved our goal from Chapter 1.2 – and now we can analyze any piece of Arabic text which correspond to classify what dialect the text is from.
+    The goal of our work was to develop a system that recognizes and classifies different Arabic dialects by using various models. Since people in social networks usually use different dialects to contact with each other and there are multiple words used in different dialects that causes a lot of misconception with each dialect. We tried to accomplish our goal by utilizing diverse NLP models. We used three models (Naïve Bayes, BERT, BERT large). Considering classifying Arabic dialects is not an easy task, there were some aspects that helped to improve the accuracy. However, we tested the models and saw the huge difference between Naïve Bayes, Both BERT and BERT large. The lowest performance is Naïve Bayes. BERT is used in our project specifically to understand the meaning of language’s text, which gives BERT and BERT large great advantage to fulfill the task with a high accuracy. Due to the complex nature of the problem, we used a portion of the data to get good results as we saw in the experiments and results. Finding the right capabilities for the model was the key for acquiring appropriate results. After we finished the implementation, we successfully achieved our goal from Chapter 1.2 – and now we can analyze any piece of Arabic text which correspond to classify what dialect the text is from. 
 
 
 \newpage
