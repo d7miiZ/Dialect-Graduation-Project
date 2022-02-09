@@ -130,7 +130,7 @@ We would like to express our great gratitude to Dr. Nasser Alsadhan for his valu
 The Arabic language is one of the oldest languages widely used today, and as a result of that, many Arabic speaking regions have formed dialects exclusive to their own. For example, many countries surrounding the Arabic Gulf have formed a dialect different to countries in the Levantine region. We intend on identifying and systematically determining the dialect of a piece of text. 
 
  This research has many applications in Arabic text analysis, such as helping in identifying the regions customers most often come from by analyzing a product’s reviews and comments and breaking them down by region, which provides useful intel for a business. It also helps in narrowing the nationality of an anonymous writer of a piece of text by predicting their region.
-One of the major challenges in dialect recognition is dividing data into classes of dialects. Saudi Arabia and the UAE have dialects that differ widely from each other when solely considered, though they feel very similar in comparison to a Levantine dialect. The researchers will determine a classification easy enough for a machine to detect, but sophisticated enough to be useful. 
+One of the major challenges in dialect recognition is dividing data into classes of dialects. Saudi Arabia and the UAE have dialects that differ widely from each other when solely considered, though they feel very similar in comparison to a Levantine dialect. We will determine a classification easy enough for a machine to detect, but sophisticated enough to be useful. 
 
 We intend to build a machine learning powered classifier that distinguishes between a set number of different Arabic dialects (e.g. Egyptian, Levantine, Gulf, etc.) when given a piece of text. We’ll use state of the art technologies in the field of NLP (natural language processing) in order to train an effective classifier that understands the differences between dialects.
 
@@ -398,7 +398,7 @@ The discussed problem in this research has been tackled by many researchers over
     
     The most prominent corpora collected is the Arabic Online Commentary (AOC) dataset which gathered millions of comments from three newspapers\cite{zaidan_burch}\label{txt:aoc}.
     
-    Though the AOC dataset was big enough, it was not annotated fully, which might harm a predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then the researchers annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
+    Though the AOC dataset was big enough, it was not annotated fully, which might harm a predicting model's results. There has been work in creating an annotated dataset built from the AOC dataset alongside North African dialectical data collected from the Tunisian Arabic Corpus\footnote{http://www.tunisiya.org/}. Then we annoatated the collected data by using Amazon's \emph{Mechanical Turk} (MTURK), which hires online annotators\cite{el_haj_etal_2018_arabic}.
      
     Another improvment of the AOC dataset came from Cotterell and Callison-Burch, in which they extended the AOC newpaper dataset to include about 550K words from 5 newspapers "\textbf{Al-Youm Al-Sabe’}, a Saudi-Arabian newspaper \textbf{Al-Riyadh}, a Jordanian newspaper \textbf{Al-Ghad}, an Algerian newspaper, \textbf{Ech Chorouk El Youmi} and an Iraqi newspaper \textbf{Al-Wefaq}.". As well as 660k words scraped from twitter tweets. After collecting the extended dataset, they manually annotated them using Amazon's Mechnical Turk\cite{cotterell-callison-burch-2014-multi}.
      
@@ -423,7 +423,7 @@ The discussed problem in this research has been tackled by many researchers over
     
     Alshutayri used the SMADC dataset to classify dialects to GLF, NOR, LEV, EGY and IRQ. They used Sequential Minimal Optimization (SMO) algorithm with multinomial Naive Bayes (MNB) with different tokenizers, run via the data analysis tool WEKA to achieve an accuracy of 60.68\%\cite{alshutayri}.
     
-    Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 69.19\% The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
+    Alshutayri have also tried lexical methods. One of which is simple voting, which was described in section \ref{txt:simple_voting}. Using the SMADC dataset, the researcher achieved an accuracy of 69.19\%. The researcher also experimented with weighted voting, filtering based on MSA words and more\cite{alshutayri}.
     
     \begin{figure}[h]
         \includegraphics[scale=0.35]{Figures/smadc_simple_voting.png}
@@ -525,10 +525,7 @@ The discussed problem in this research has been tackled by many researchers over
                 \caption{Example of Arabic word segmentation.\cite{arabic_segmentation}}
                 \label{fig:arabic_segmentation}
             \end{figure}
-            
-            % The researchers didn't have to make a segmentation function because we made use of the segmentation function that is internally integrated in AraBERT which uses Farasa segmenter\cite{Farasa}.
-            % Lets mention this in the implementation, actually
-            
+
             \subsubsection{Tokenization}
             As we discussed in section \ref{txt:tokenization_section} tokenization is an essential task for NLP problems. We'll be using tokenization to transform our dataset to be ready for model input. After applying normalization and segmentation on the data, we transform each token to a number, so if one token is repeated more than once then that token is transformed to the same number. This allows the model to understand the input.
             
@@ -550,10 +547,10 @@ The discussed problem in this research has been tackled by many researchers over
         
         We've also introduced a warmup ratio which should accelerate our model to achieving optimality. The main idea is to use a variable learning rate that increases linearly from a set minimum to a maximum then linearly decreases over the remaining number of steps. This will help us to decrease the amount of training hours and save our resources.
         
-    \section{Implementation }
+    \section{Implementation}
     
     \subsection{Setting up and initialization} \label{txt:models}
-    The researchers used three different AraBERT models\cite{antoun2020arabert}:
+    We used three different AraBERT models\cite{antoun2020arabert}:
     \begin{enumerate}
         \item AraBERTv2-base (543MB)
         \item AraBERTv2-large (1.38G)
@@ -561,7 +558,7 @@ The discussed problem in this research has been tackled by many researchers over
     \end{enumerate}
     And downloaded them via the \emph{Hugging Face} library to fine-tune them to their specific use case.
     
-    The researchers also downloaded and imported the SMADC dataset to use it.
+    We also downloaded and imported the SMADC dataset to use it.
     
     \begin{lstlisting}[language=Python, basicstyle=\footnotesize]
     def get_SMADC_folder_data(code_folder_path=""):
@@ -579,9 +576,9 @@ The discussed problem in this research has been tackled by many researchers over
     \end{lstlisting}
     
     \subsection{Preprocessing}
-    The preprocessing pipeline that the researchers took is first normalize and segment the raw text after that we use tokenizer so that each token is transformed unique number (same tokens transform to the same number) after finishing the preprocessing pipeline now we can feed AraBERT the inputs.
+    Our preprocessing pipeline consists of multiple transformations of the input which change it from raw text to unique IDs (corresponding to indices in BERT's dictionary). When receiving input we normalize, segment, and tokenize the input via AraBERT's own preprocessor and tokenizer. In this section, we will show how we preprocessed and tokenized our inputs as well as a few techniques which we use to increase the efficiency of our preprocessing pipeline.
         \subsubsection{AraBERT preprocessor and farasapy}
-        Each AraBERT  model has it's own preprocessor that it's trained on, also each preprocessor uses internally Farasa Segmenter from the Farasa package, in this example we will use the bert-large-arabertv2 model preprocessor.
+        Each model uses the Farasa Segmenter\cite{Farasa} from the \emph{farasapy} python package. In the following piece of code we show how we preprocessed our data.
         \begin{lstlisting}[language=Python]
         from arabert.preprocess import ArabertPreprocessor
         
@@ -593,7 +590,7 @@ The discussed problem in this research has been tackled by many researchers over
         This code takes about 16 minute and 22 second to execute.
         
         \subsubsection{AraBERT tokenizer}
-        The tokenizer's goal is to transform raw text to unique numbers (i.e IDs), its objective is to find the most meaningful representation, each AraBERT model has its own vocabulary and tokenizer that its trained on, in this example we will use the bert-large-arabertv2 model tokenizer.
+        Since each AraBERT model is trained on a different dataset their respective vocabularies will differ from each other, for this reason we must use the exact tokenizer that it has been trained on. In this piece of code we show how we use the bert-large-arabertv2 model tokenizer.
         \begin{lstlisting}[
         language=Python,
         basicstyle=\footnotesize
@@ -618,7 +615,7 @@ The discussed problem in this research has been tackled by many researchers over
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         train_encoding = tokenize(tokenizer, list(train["Text"]), sequence_length)
         \end{lstlisting}
-        The researchers also implemented another version that tokenizes batches of strings to help reduce memory footprint.
+        We also implemented another version that tokenizes batches of strings to help reduce memory footprint.
         \begin{lstlisting}[
         language=Python,
         basicstyle=\footnotesize,
@@ -653,7 +650,7 @@ The discussed problem in this research has been tackled by many researchers over
         train_encoding =  batch_tokenize(tokenizer, train["Text"], 500, sequence_length)
         \end{lstlisting}
         \subsubsection{Saving and loading preprocessed data}
-        For each run the preprocessing pipeline takes approximately 16 - 20 minutes, the researches save and load the preprocessed data to cut the preprocessing time short. The loading takes about 3 minutes which reduces about 70\% of waiting time. 
+        For each run the preprocessing pipeline takes approximately 16 - 20 minutes, the researches save and load the preprocessed data to cut the preprocessing time short. The loading takes about 3 minutes which reduces about 70\% of the running time. 
         \begin{lstlisting}[
         language=Python,
         basicstyle=\footnotesize
@@ -672,8 +669,8 @@ The discussed problem in this research has been tackled by many researchers over
         
         
     \subsection{Training AraBERT}
-    The researchers utilize the \emph{Hugging Face Trainer} utility, which allows us to fine-tune AraBERT by changing various options (optimizers, loss function, etc.) as well as run costume monitoring scripts each n-steps of training.
-    In the following code we initialize our Trainer arguments.
+    We utilize the \emph{Hugging Face Trainer} utility, which allows us to fine-tune AraBERT by changing various options (optimizers, loss function, etc.). We can also custom monitoring scripts which execute for each n-steps of training.
+    In the following piece of code we show how we initialize our Trainer arguments.
     \begin{lstlisting}[
         language=Python,
         basicstyle=\tiny
@@ -749,7 +746,27 @@ The discussed problem in this research has been tackled by many researchers over
     
     
     \section {Results}
-    After training the three models we mentioned in section \ref{txt:models} we tested them on three datasets obtained from various sources, these datasets are: \label{txt:res}
+    After training the three models we mentioned in section \ref{txt:models} as well as training very many traditional models and choosing the best ones, here are the results on a test set of the SMADC dataset.
+    \vskip0.5cm
+    \hskip1.7cm
+    \begin{tabular}{lr}
+        % \centering
+        \toprule
+        Model name & Accuracy \\
+        \midrule
+        bert-large-arabertv2 &        0.892 \\
+        bert-base-arabertv2 &        0.872 \\
+        bert-base-arabertv02-twitter  & 0.826 \\
+        Linear SVM            &          0.747 \\
+        MultinomialNaiveBayes &          0.865 \\
+        RandomForest          &           0.760 \\
+        \bottomrule
+    \end{tabular}
+    
+
+    
+     \label{txt:res}
+    Then we tested the same models on three additional test sets:
     \begin{enumerate}
         \item \textbf{dart}: \emph{DART: A Large Dataset of Dialectal Arabic Tweets}\cite{alsarsour-etal-2018-dart}
         \item \textbf{annotated\_data\_folder}: \emph{The Arabic Online Commentary Dataset:
@@ -757,45 +774,51 @@ an Annotated Dataset of Informal Arabic with High Dialectal Content}\cite{zaidan
         \item \textbf{arabic\_dialects\_dataset}: \emph{A Multi-Dialect, Multi-Genre Corpus of Informal Written Arabic}\cite{cotterell-callison-burch-2014-multi}
     \end{enumerate}
     
-    
-    \vskip2.3cm
-    \hskip-3.8cm
-    \begin{tabular}{lrlrrr}
-    \toprule
-              Model name &  SMADC Accuracy &         Dataset &  Macro F1 &  Macro precision &  Macro recall \\
-    \midrule
-    bert-large-arabertv2 &        0.892154 &  annotated\_data &  0.608431 &         0.597582 &      0.660434 \\
-    bert-large-arabertv2 &        0.892154 & arabic\_dialects &  0.449060 &         0.459210 &      0.440770 \\
-     bert-base-arabertv2 &        0.871582 &            dart &  0.760816 &         0.766500 &      0.759033 \\
-    \bottomrule
-    \end{tabular}
-
+    Here are the most robust BERT models (by Macro F1):
+    \vskip0.5cm
+    \hskip-0.7cm
+    \resizebox{\columnwidth}{!}{%
+        % \hskip-2.2cm
+        % \centering
+        \begin{tabular}{llrrr}
+        \toprule
+         Model name &         Dataset &  Macro F1 &  Macro precision &  Macro recall \\
+        \midrule
+        bert-large-arabertv2 &  annotated\_data &  0.608431 &         0.597582 &      0.660434 \\
+        bert-large-arabertv2 & arabic\_dialects &  0.449060 &         0.459210 &      0.440770 \\
+        bert-base-arabertv2 &            dart &  0.760816 &         0.766500 &      0.759033 \\
+        \bottomrule
+        \end{tabular}
+    }
 
         
-    \vskip0.3cm
-    We also note that we trained a AraBERT Large model that did over-fit on the SMADC test set with 96\% accuracy, while AraBERT Base didn't. 
-    We also compared very many traditional models and applied the same tests on, here are the best 3 models on all datasets
-    \vskip0.3cm
-    \hskip-4.2cm
-    \begin{tabular}{lllrrr}
-    \toprule
-               Model name & SMADC Accuracy &         Dataset &  Macro F1 &  Macro precision &  Macro recall \\
-    \midrule
-    MultinomialNaiveBayes &          0.865 &  annotated\_data &  0.552954 &         0.561883 &      0.611622 \\
-    MultinomialNaiveBayes &          0.865 & arabic\_dialects &  0.450884 &         0.464933 &      0.446934 \\
-    MultinomialNaiveBayes &          0.865 &            dart &  0.737389 &         0.742771 &      0.748739 \\
-             RandomForest &           0.76 &  annotated\_data &  0.462519 &         0.497453 &      0.497691 \\
-             RandomForest &           0.76 & arabic\_dialects &  0.357108 &         0.400919 &      0.357486 \\
-             RandomForest &           0.76 &            dart &  0.667313 &         0.699270 &      0.681225 \\
-               Linear SVM &          0.747 &  annotated\_data &  0.491982 &         0.524889 &      0.523377 \\
-               Linear SVM &          0.747 & arabic\_dialects &  0.373722 &         0.418487 &      0.370232 \\
-               Linear SVM &          0.747 &            dart &  0.656211 &         0.698349 &      0.667280 \\
-    \bottomrule
-    \end{tabular}
-
+    \vskip0.5cm
+    
+    Here are the most robust traditional models (by Macro F1):
+    
+    \vskip0.5cm
+    \hskip-0.7cm
+    \resizebox{\columnwidth}{!}{%
+        \begin{tabular}{llrrr}
+        % \centering
+        \toprule
+                   Model name &         Dataset &  Macro F1 &  Macro precision &  Macro recall \\
+        \midrule
+        MultinomialNaiveBayes &  annotated\_data &  0.552954 &         0.561883 &      0.611622 \\
+        MultinomialNaiveBayes & arabic\_dialects &  0.450884 &         0.464933 &      0.446934 \\
+        MultinomialNaiveBayes &            dart &  0.737389 &         0.742771 &      0.748739 \\
+        \bottomrule
+        \end{tabular}
+    }
+    \vskip0.5cm
+    
+    As the tables above suggest, our BERT model out performers every traditional model in SMADC accuracy as well as Macro F1 on the additional test sets. Also, the most robust model is \emph{bert-large-arabertv2} having a slight edge over \emph{bert-base-arabertv2}. We also note that \emph{bert-base-arabertv02-twitter} does much worse than the best traditional models because of its training dataset consisting of noisy twitter data.
+    
+    We also note that some of the BERT models, like \emph{bert-large-arabertv2} did have much better SMADC test set accuracy (as high as 94\% on test set), but failed when cross tested with additional datasets. The BERT models you see above are the most robust by Macro F1 of the additional test sets.
     
     \section {Conclusion}
-    The goal of our work was to develop a system that recognizes and classifies different Arabic dialects by experimenting with various models. And since people in social media usually use different dialects to contact with each other, it may lead us to see multiple words used in different dialects that causes a lot of misconception with each dialect, we tried to accomplish our goal by applying all the steps from collecting and preprocessing the data to finalizing the implementation and results. We used the AraBERT models from section \ref{txt:models} using three datasets from Chapter \ref{txt:res}. Considering classifying Arabic dialects is not an easy task, we tested the AraBERT models and saw the huge difference between them and the traditional models. The best performance goes to AraBERT Large model due to its highest accuracy. AraBERT is very useful in our project specifically to understand the meaning of Arabic language’s text, which gives both AraBERT base and AraBERT large great advantage to fulfill the task with a high accuracy compared to the traditional models. Due to the complex nature of the problem, we used a portion of the data to get good results as we saw in the results. Finding the right capabilities for the models was the key for acquiring appropriate results. After we finished the implementation, we successfully achieved our goal from Chapter 1.2 – and now we can analyze any piece of Arabic text to classify what dialect the text is from.
+    The goal of our work was to develop a system that recognizes and classifies different Arabic dialects by experimenting with various models. And since people in social media usually use different dialects to communicate with each other, it may lead us to see multiple words used in different dialects that causes a lot of misconception with each dialect, we tried to accomplish our goal by applying all the steps from collecting and preprocessing the data to finalizing the implementation and results. We used the AraBERT models from section \ref{txt:models} using three datasets from Chapter \ref{txt:res}. Considering classifying Arabic dialects is not an easy task, we tested the AraBERT models and saw the huge difference between them and the traditional models. The best performance goes to AraBERT Large model due to its highest accuracy. AraBERT is very useful in our project specifically to understand the meaning of Arabic language’s text, which gives both AraBERT base and AraBERT large great advantage to fulfill the task with a high accuracy compared to the traditional models. Due to the complex nature of the problem, we used a portion of the data to get good results as we saw in the results. Finding the right capabilities for the models was the key for acquiring appropriate results. After we finished the implementation, we successfully achieved our goal from Chapter 1.2 – and now we can analyze any piece of Arabic text to classify what dialect the text is from.
+
 
 
 \newpage
