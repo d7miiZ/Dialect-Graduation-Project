@@ -7,7 +7,7 @@ from pickle import dump, load
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, classification_report
 from transformers import AutoModelForSequenceClassification
 from transformers.data.processors.utils import InputFeatures
 from transformers import Trainer, TrainingArguments
@@ -191,15 +191,12 @@ def compute_metrics(p):
     preds = np.argmax(p.predictions, axis=1)
     assert len(preds) == len(p.label_ids)
 
-    macro_f1 = f1_score(p.label_ids,preds,average='macro')
-    macro_precision = precision_score(p.label_ids,preds,average='macro')
-    macro_recall = recall_score(p.label_ids,preds,average='macro')
-    acc = accuracy_score(p.label_ids,preds)
     return {
-      'macro_f1' : macro_f1,
-      'macro_precision': macro_precision,
-      'macro_recall': macro_recall,
-      'accuracy': acc
+      'macro_f1' : f1_score(p.label_ids, preds, average= "macro"),
+      "macro_precision": precision_score(p.label_ids, preds, average= "macro"),
+      "macro_recall": recall_score(p.label_ids, preds, average= "macro"),
+      "accuracy": accuracy_score(p.label_ids, preds),
+      "report": classification_report(p.label_ids,  preds,  output_dict= True)
     }
 
 def predict_dialect(model_path, dialect_text, tokenizer, preprocessing_function, sequence_length):
