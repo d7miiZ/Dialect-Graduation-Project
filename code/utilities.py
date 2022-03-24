@@ -207,7 +207,7 @@ def compute_metrics(p):
       "macro_precision": precision_score(p.label_ids, preds, average= "macro"),
       "macro_recall": recall_score(p.label_ids, preds, average= "macro"),
       "accuracy": accuracy_score(p.label_ids, preds),
-      "report": classification_report(p.label_ids, preds, labels=['NOR', 'IRQ', 'LEV', 'EGY', 'GLF'], output_dict=True)
+      "report": classification_report(p.label_ids, preds, target_names=['NOR', 'IRQ', 'LEV', 'EGY', 'GLF'], output_dict=True)
     }
 
 def predict_dialect(model_path, dialect_text, tokenizer, preprocessing_function, sequence_length):
