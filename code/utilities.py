@@ -95,6 +95,17 @@ def get_music_df(code_folder_path=""):
     
     return pd.concat(dataframes)
 
+def get_arabic_lexicon_data(code_folder_path=""):
+    """Returns a dictionary of emotions and a list of words that represent them. e.g. {emotion1: [word1, word2, word3, ..], ..}"""
+    path_to_files = join(code_folder_path, "data", "emotion-lexicon-master", "arb", "*")
+    paths = glob(path_to_files)
+    emotions = [path[path.rfind("\\")+1:path.rfind(".")] for path in paths]
+    emotion_to_words = {}
+    for emotion, path in zip(emotions, paths):
+        with open(path, encoding="utf8") as file:
+            emotion_to_words[emotion] = file.read().split()
+    return emotion_to_words
+
 def tokenize(tokenizer, batch, sequence_length):
     """Tokenizes a list of strings"""
     return tokenizer.batch_encode_plus(
@@ -196,7 +207,7 @@ def compute_metrics(p):
       "macro_precision": precision_score(p.label_ids, preds, average= "macro"),
       "macro_recall": recall_score(p.label_ids, preds, average= "macro"),
       "accuracy": accuracy_score(p.label_ids, preds),
-      "report": classification_report(p.label_ids,  preds,  output_dict= True)
+      "report": classification_report(p.label_ids, preds, labels=['NOR', 'IRQ', 'LEV', 'EGY', 'GLF'], output_dict=True)
     }
 
 def predict_dialect(model_path, dialect_text, tokenizer, preprocessing_function, sequence_length):
