@@ -9,3 +9,4 @@ extra_data/D7_data/tweets/tweets.json
 code/preprocessed_data/*.pkl
 **.model
 */__pycache__/
+**/embeddings/
