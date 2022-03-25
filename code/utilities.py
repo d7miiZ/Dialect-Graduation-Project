@@ -21,7 +21,7 @@ def get_SMADC_folder_data(code_folder_path=""):
 
     for file in files:
         region = file[-7:-4]
-        temp_df = pd.read_csv(file, encoding="utf8", delimiter="\r\n", names=["Text"])
+        temp_df = pd.read_csv(file, encoding="utf8", delimiter="\r\n", names=["Text"], engine="python")
         temp_df["Region"] = region
         dataframes.append(temp_df)
     
