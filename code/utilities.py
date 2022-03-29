@@ -56,7 +56,7 @@ def get_arabic_dialects_dataset_folder_data(code_folder_path=""):
         norm_file_path = path.normpath(file)
         file_name = norm_file_path.split(os.sep)[-1]
 
-        df = pd.read_csv(file, encoding="utf8", names=["Text"])
+        df = pd.read_csv(file, encoding="utf8", names=["Text"], delimiter="\r\n", engine="python")
         df["Region"] = region_to_label[file_name]
         dfs.append(df)
         
@@ -180,7 +180,7 @@ def generate_training_args(output_dir, epochs=5, do_warmup=True, warmup_ratio=0.
         total_steps = steps_per_epoch * training_args.num_train_epochs
         training_args.warmup_steps = total_steps * warmup_ratio 
     
-    training_args.logging_steps = 10 ** 4
+    training_args.logging_steps = 10 ** 5
     
     if eval_while_training:
         training_args.evaluation_strategy = "steps"
