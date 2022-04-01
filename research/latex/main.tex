@@ -742,6 +742,39 @@ The discussed problem in this research has been tackled by many researchers over
         trainer.train()
     \end{lstlisting}
     
+    \begin{figure}[h]
+            % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.7]{Figures/website.png}
+            \caption{Arabic Dialect Classification website}
+            \label{fig:website}
+        \end{figure}
+    
+    \subsection{Demonstration}
+            We wanted to showcase our project to further demonstrate our work and show our results. We also wanted to make it accessible for those who want to try it out for themselves, and to get feedback on our predictions to possibly further improve our results.
+            
+            Our website is as shown in Figure \ref{fig:website}, we provided two models to choose from, BERT and BAYES. We also provided samples of sentences in different dialects to conveniently try out the classifier.
+            
+            Prediction results will be displayed as shown in Figure \ref{fig:demo_example}, users then can give their feedback on whether the prediction was correct or not, if not, they can choose the correct dialect that the text belongs to, which will be saved on our database. All steps are shown in Figure \ref{fig:struct}
+            
+        \begin{figure}[h]
+            % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.7]{Figures/livedemo.png}
+            \caption{Live demo example}
+            \label{fig:demo_example}
+        \end{figure}
+        
+        \begin{figure}[h]
+            % \hskip-3.3cm
+            \centering
+            \includegraphics[scale=0.9]{Figures/steps.png}
+            \caption{Demonstration structure}
+            \label{fig:struct}
+        \end{figure}
+            
+        
+    
     
     \section {Results}
     After training the three models we mentioned in section \ref{txt:models} as well as training very many traditional models and choosing the best ones, here are the results on a test set of the SMADC dataset.
