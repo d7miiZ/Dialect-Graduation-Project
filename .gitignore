@@ -10,3 +10,4 @@ code/preprocessed_data/*.pkl
 */__pycache__/
 **/embeddings/
 **/emotion_lexicon/
+**/embeddings_idea/preprocessed_data/
