@@ -768,13 +768,13 @@ The discussed problem in this research has been tackled by many researchers over
         \begin{figure}[h]
             % \hskip-3.3cm
             \centering
-            \includegraphics[scale=0.9]{Figures/steps.png}
+            \includegraphics[scale=0.6]{Figures/steps_v2.png}
             \caption{Demonstration structure}
             \label{fig:struct}
         \end{figure}
             
         
-    
+    \clearpage
     
     \section {Results}
     After training the three models we mentioned in section \ref{txt:models} as well as training very many traditional models and choosing the best ones, here are the results on a test set of the SMADC dataset.
@@ -797,22 +797,37 @@ The discussed problem in this research has been tackled by many researchers over
     \vskip0.5cm
     And here's the class-specific results for the best performing model (bert-large-arabertv2) according to the SMADC dataset.
     \vskip0.5cm
-    \hskip1.9cm
-    \begin{tabular}{lrrr}
+    \hskip-1.5cm
+    \begin{tabular}{lrrrrr}
     \toprule
-    {} &  Precision &    Recall &  F1-Score \\
+    {} &  Precision &    Recall &  F1-Score &  Training Samples &  Testing Samples \\
     \midrule
-    EGY &   0.819585 &  0.775428 &  0.796895 \\
-    GLF &   0.866476 &  0.838073 &  0.852038 \\
-    IRQ &   0.862557 &  0.863045 &  0.862801 \\
-    LEV &   0.842440 &  0.823602 &  0.832915 \\
-    NOR &   0.933374 &  0.966609 &  0.949701 \\
+    EGY &   0.819585 &  0.775428 &  0.796895 &            622108 &             1986 \\
+    GLF &   0.866476 &  0.838073 &  0.852038 &            180244 &             2532 \\
+    IRQ &   0.862557 &  0.863045 &  0.862801 &            153933 &             1767 \\
+    LEV &   0.842440 &  0.823602 &  0.832915 &            195631 &             1610 \\
+    NOR &   0.933374 &  0.966609 &  0.949701 &            256654 &             6319 \\
     \bottomrule
     \end{tabular}
+    
     \vskip0.5cm
+    And also, the confusion matrix for the test set.
+    \vskip0.5cm
+    \hskip-0.32cm
+    \begin{tabular}{lrrrrr}
+    \toprule
+    {} &       EGY &       GLF &       IRQ &       LEV &       NOR \\
+    \midrule
+    EGY &  0.863045 &  0.037351 &  0.028862 &  0.027731 &  0.043011 \\
+    GLF &  0.041793 &  0.775428 &  0.069486 &  0.035247 &  0.078046 \\
+    IRQ &  0.024487 &  0.049368 &  0.838073 &  0.034360 &  0.053712 \\
+    LEV &  0.038509 &  0.049689 &  0.045342 &  0.823602 &  0.042857 \\
+    NOR &  0.005697 &  0.010761 &  0.010286 &  0.006647 &  0.966609 \\
+    \bottomrule
+    \end{tabular}
 
 
-    \vskip0.5cm
+    \vskip1.cm
      \label{txt:res}
     Then we tested the same models on three additional test sets:
     \begin{enumerate}
@@ -873,4 +888,4 @@ an Annotated Dataset of Informal Arabic with High Dialectal Content}\cite{zaidan
 \bibliographystyle{plain} % We choose the &quot;plain&quot; reference style
 \bibliography{cite.bib} % Entries are in the &quot;refs.bib&quot; file</code></pre>
 
-\end{document}
+\end{document}https://www.overleaf.com/project/613a35976c4585523984de56
