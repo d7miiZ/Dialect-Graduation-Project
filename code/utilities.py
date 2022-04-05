@@ -7,7 +7,7 @@ from pickle import dump, load
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, classification_report
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, classification_report, confusion_matrix
 from transformers import AutoModelForSequenceClassification
 from transformers.data.processors.utils import InputFeatures
 from transformers import Trainer, TrainingArguments
@@ -206,6 +206,7 @@ def compute_metrics(p):
       'macro_f1' : f1_score(p.label_ids, preds, average= "macro"),
       "macro_precision": precision_score(p.label_ids, preds, average= "macro"),
       "macro_recall": recall_score(p.label_ids, preds, average= "macro"),
+      "confusion_matrix": confusion_matrix(p.label_ids, preds, normalize="true"),
       "accuracy": accuracy_score(p.label_ids, preds),
       "report": classification_report(p.label_ids, preds, target_names=['NOR', 'IRQ', 'LEV', 'EGY', 'GLF'], output_dict=True)
     }
